@@ -34,10 +34,11 @@ function VaccineList() {
 					{vaccinesList.map((vaccine) => (
 						<Col key={vaccine.id}>
 							<Card>
-								<Card.Img variant="top" /*src={vaccine.image}*/ src={"src/alt/notfound.jpg"} />
+								<Card.Img variant="top" src={vaccine.image} />
 								<Card.Body>
-									<Card.Title>{vaccine.vaccinename}</Card.Title>
+									<Card.Title>{vaccine.name}</Card.Title>
 									<Card.Text>Price: {vaccine.price}$</Card.Text>
+									<Card.Text>{vaccine.description}</Card.Text>
 									<Link to={`/VaccineDetail/${vaccine.id}`}>
 										<Button>Detail</Button>
 									</Link>

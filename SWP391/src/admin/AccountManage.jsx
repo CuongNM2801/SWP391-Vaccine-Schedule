@@ -5,7 +5,8 @@ import Sidebar from "../components/Sidebar";
 function AccountManage() {
 	const [accounts, setAccounts] = useState([]);
 
-	const accountAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/account";
+	// const accountAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/account";
+	const accountAPI = "http://localhost:8080/users";
 
 	useEffect(() => {
 		fetch(accountAPI)

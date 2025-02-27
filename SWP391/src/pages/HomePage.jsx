@@ -42,7 +42,7 @@ function HomePage() {
 					{randomVaccines.map((vaccine) => (
 						<Col key={vaccine.id}>
 							<Card>
-								<Card.Img variant="top" /*src={vaccine.image}*/ src={"src/alt/notfound.jpg"} />
+								<Card.Img variant="top" src={vaccine.image} />
 								<Card.Body>
 									<Card.Title>{vaccine.name}</Card.Title>
 									<Card.Text>Price: {vaccine.price}$</Card.Text>
