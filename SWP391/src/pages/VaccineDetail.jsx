@@ -59,11 +59,21 @@ function VaccineDetail() {
 					</>
 				) : (
 					<>
-						<h2>{vaccine.vaccinename}</h2>
+						<h2>{vaccine.name}</h2> Manufaturer: {vaccine.manufacturer}
 						<p>Price: {vaccine.price}$</p>
 						<hr></hr>
-						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga omnis placeat voluptates voluptatem reiciendis, distinctio earum cum iure est iusto dolores veniam veritatis optio dolorem libero
-						id quis. Explicabo, unde.
+						<b>Description:</b>
+						<br />
+						<p>{vaccine.description}</p>
+						<b>Dosage:</b>
+						<br />
+						<p>{vaccine.dosage}</p>
+						<b>Description</b>
+						<br />
+						<p>{vaccine.description}</p>
+						<b>Description</b>
+						<br />
+						<p>{vaccine.description}</p>
 					</>
 				)}
 			</Container>
