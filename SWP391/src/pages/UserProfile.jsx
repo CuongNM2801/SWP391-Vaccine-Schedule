@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Navigation from "../components/Navbar";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, Row } from "react-bootstrap";
 import SideMenu from "../components/SideMenu";
+import UpdateUser from "../components/UpdateUser";
 
 function UserProfile() {
-	const user = JSON.parse(localStorage.getItem("user"));
+	const token = localStorage.getItem("token");
 	const [isOpen, setIsOpen] = useState(false); //use this to open user update form
 
 	return (
@@ -17,19 +18,26 @@ function UserProfile() {
 					<Col>
 						<h2>User Profile:</h2>
 						<hr></hr>
-						<Container>
-							<b>Fullname: </b> {user.firstName} {user.lastName} <br />
-							<b>Gender: </b> {user.gender} <br />
-							<b>Email: </b> {user.email} <br />
-							<b>Phone number: </b> {user.phoneNumber} <br />
-							<b>Address: </b> {user.address} <br />
-							<b>Username: </b> {user.username} <br />
-							<Button
-								onClick={() => {
-									setIsOpen(true);
-								}}>
-								Edit profile
-							</Button>
+						<Container className="d-flex justify-content-center">
+							<Card style={{ width: "18rem" }}>
+								<Card.Img variant="top" src="src/alt/notfound.jpg" />
+								<ListGroup className="list-group-flush">
+									<ListGroup.Item>Fullname: ...</ListGroup.Item>
+									<ListGroup.Item>Gender: ...</ListGroup.Item>
+									<ListGroup.Item>Email: ...</ListGroup.Item>
+									<ListGroup.Item>Phone number: ...</ListGroup.Item>
+									<ListGroup.Item>Address: ...</ListGroup.Item>
+								</ListGroup>
+								<Card.Body>
+									<Button
+										onClick={() => {
+											setIsOpen(true);
+										}}>
+										Edit profile
+									</Button>
+									{isOpen && <UpdateUser setIsOpen={setIsOpen} open={isOpen} />}
+								</Card.Body>
+							</Card>
 						</Container>
 					</Col>
 				</Row>

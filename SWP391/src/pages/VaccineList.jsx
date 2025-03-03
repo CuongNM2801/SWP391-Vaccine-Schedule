@@ -4,7 +4,8 @@ import { Button, Card, Col, Container, Form, InputGroup, Row } from "react-boots
 import { Link } from "react-router-dom";
 
 function VaccineList() {
-	const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	// const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	const vaccineAPI = "http://localhost:8080/vaccine/get";
 	const [vaccinesList, setVaccinesList] = useState([]);
 
 	useEffect(() => {
@@ -21,6 +22,7 @@ function VaccineList() {
 			<Navigation />
 			<br />
 			<Container>
+				{console.log(vaccinesList)}
 				<h2>Vaccine List:</h2>
 				<Form>
 					<InputGroup className="mb-3">

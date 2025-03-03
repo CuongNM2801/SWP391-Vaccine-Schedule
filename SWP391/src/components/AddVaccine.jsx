@@ -4,7 +4,8 @@ import React from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 function AddVaccine({ setIsOpen, open }) {
-	const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	// const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	const vaccineAPI = "http://localhost:8080/vaccine/addVaccine";
 
 	const handleClose = () => setIsOpen(false); //Close modal
 
@@ -22,7 +23,7 @@ function AddVaccine({ setIsOpen, open }) {
 		recommended: Yup.string().required("Recommended For is required").min(30, "Recommended For must be at least 30 characters"),
 		preVaccination: Yup.string().required("Pre-Vaccination Information is required").min(30, "Pre-Vaccination Information must be at least 30 characters"),
 		compatibility: Yup.string().required("Compatibility is required").min(30, "Compatibility must be at least 30 characters"),
-		imageUrl: Yup.mixed().required("Vaccine Image is required"),
+		// imageUrl: Yup.mixed().required("Vaccine Image is required"),
 		quantity: Yup.number().required("Quantity is required").min(0, "Quantity cannot be negative"),
 		price: Yup.number().required("Price is required").min(0, "Price cannot be negative"),
 		status: Yup.string().required("Status is required"),
@@ -43,7 +44,7 @@ function AddVaccine({ setIsOpen, open }) {
 			recommended: "",
 			preVaccination: "",
 			compatibility: "",
-			imageUrl: null,
+			imagineUrl: "https://example.com/vaccine-image.jpg",
 			quantity: 0,
 			price: 0,
 			status: "",
@@ -285,11 +286,11 @@ function AddVaccine({ setIsOpen, open }) {
 							</Form.Group>
 						</Row>
 
-						<Form.Group controlId="formGridImage" className="mb-3">
+						{/* <Form.Group controlId="formGridImage" className="mb-3">
 							<Form.Label>Vaccine Image</Form.Label>
 							<Form.Control type="file" onChange={handleFileChange} aria-label="Vaccine Image" isInvalid={formik.touched.imageUrl && formik.errors.imageUrl} />
 							<Form.Control.Feedback type="invalid">{formik.errors.imageUrl}</Form.Control.Feedback>
-						</Form.Group>
+						</Form.Group> */}
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleClose}>

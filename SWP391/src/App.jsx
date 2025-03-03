@@ -21,8 +21,8 @@ import HealthRecord from "./pages/HealthRecord";
 
 function App() {
 	const navigate = useNavigate();
-	const user = JSON.parse(localStorage.getItem("user"));
-	const isLoggedIn = !!user;
+	const token = localStorage.getItem("token");
+	const isLoggedIn = !!token;
 
 	const ProtectedRoute = ({ element: Component, guestOnly, userOnly, adminOnly, ...rest }) => {
 		if (guestOnly && isLoggedIn) {
@@ -32,7 +32,7 @@ function App() {
 			return <Navigate to="/login" replace />;
 		}
 
-		if (adminOnly && (!isLoggedIn || user.roleid !== "0")) {
+		if (adminOnly && (!isLoggedIn || token.roleid !== "0")) {
 			// Assuming admin roleid is "0"
 			return <Navigate to="/" replace />;
 		}
@@ -62,10 +62,17 @@ function App() {
 			<Route path={"/Record"} element={<ProtectedRoute element={HealthRecord} userOnly />} />
 
 			{/*Admin only*/}
+			{/* 
 			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} adminOnly />} />
 			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} adminOnly />} />
 			<Route path={"/ManageCombo"} element={<ProtectedRoute element={ComboManage} adminOnly />} />
 			<Route path={"/WorkSchedule"} element={<ProtectedRoute element={WorkSchedule} adminOnly />} />
+			 */}
+
+			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} userOnly />} />
+			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} userOnly />} />
+			<Route path={"/ManageCombo"} element={<ProtectedRoute element={ComboManage} userOnly />} />
+			<Route path={"/WorkSchedule"} element={<ProtectedRoute element={WorkSchedule} userOnly />} />
 		</Routes>
 	);
 }
