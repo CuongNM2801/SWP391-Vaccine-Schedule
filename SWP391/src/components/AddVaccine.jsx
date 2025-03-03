@@ -57,6 +57,7 @@ function AddVaccine({ setIsOpen, open }) {
 
 	const handleAddVaccine = async (values) => {
 		try {
+			console.log(vaccineAPI);
 			console.log(values);
 			const response = await fetch(vaccineAPI, {
 				method: "POST",
@@ -291,6 +292,7 @@ function AddVaccine({ setIsOpen, open }) {
 							<Form.Control type="file" onChange={handleFileChange} aria-label="Vaccine Image" isInvalid={formik.touched.imageUrl && formik.errors.imageUrl} />
 							<Form.Control.Feedback type="invalid">{formik.errors.imageUrl}</Form.Control.Feedback>
 						</Form.Group> */}
+						{/* Look this up later */}
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleClose}>
