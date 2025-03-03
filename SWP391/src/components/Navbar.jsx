@@ -93,7 +93,7 @@ function Navigation() {
 					</Nav>
 					{isLoggedIn && (
 						<Nav className="justify-content-end">
-							<NavLink to={"/ManageAccount"} className={"nav-link"}>
+							<NavLink to={"/Dashboard"} className={"nav-link"}>
 								Admin Page
 							</NavLink>
 						</Nav>

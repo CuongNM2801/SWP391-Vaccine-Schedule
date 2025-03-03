@@ -18,6 +18,7 @@ import UserChildren from "./pages/UserChildren";
 import UserScheduling from "./pages/UserScheduling";
 import UserHistory from "./pages/UserHistory";
 import HealthRecord from "./pages/HealthRecord";
+import Dashboard from "./admin/Dashboard";
 
 function App() {
 	const navigate = useNavigate();
@@ -63,12 +64,15 @@ function App() {
 
 			{/*Admin only*/}
 			{/* 
+			<Route path={"/Dashboard"} element={<ProtectedRoute element={Dashboard} adminOnly />} />
 			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} adminOnly />} />
 			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} adminOnly />} />
 			<Route path={"/ManageCombo"} element={<ProtectedRoute element={ComboManage} adminOnly />} />
 			<Route path={"/WorkSchedule"} element={<ProtectedRoute element={WorkSchedule} adminOnly />} />
 			 */}
 
+			{/*Use this path only in developement. When role is OK, use the Admin only route */}
+			<Route path={"/Dashboard"} element={<ProtectedRoute element={Dashboard} userOnly />} />
 			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} userOnly />} />
 			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} userOnly />} />
 			<Route path={"/ManageCombo"} element={<ProtectedRoute element={ComboManage} userOnly />} />

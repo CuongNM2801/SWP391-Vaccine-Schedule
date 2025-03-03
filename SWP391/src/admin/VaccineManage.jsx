@@ -20,22 +20,24 @@ function VaccineManage() {
 	}, []);
 
 	return (
-		<>
+		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>
 				<Sidebar />
 				<Col>
-					<Container>
+					<Container className="py-4">
 						{console.log(vaccines)}
-						<h1>Vaccine Manage</h1>
-						<Button
-							variant="primary"
-							onClick={() => {
-								setIsOpen(true);
-							}}
-							className="mb-3">
-							Add New Vaccine
-						</Button>
+						<Row className="mb-4 align-items-center">
+							<Col>
+								<h1 className="text-primary">Vaccine Management</h1>
+							</Col>
+							<Col className="text-end">
+								<Button variant="primary" onClick={() => setIsOpen(true)}>
+									Add New Vaccine
+								</Button>
+							</Col>
+						</Row>
 						{isOpen && <AddVaccine setIsOpen={setIsOpen} open={isOpen} />}
+						<hr className="mb-4"></hr>
 						<Table striped bordered hover responsive>
 							<thead>
 								<tr>
@@ -55,14 +57,18 @@ function VaccineManage() {
 										<tr key={vaccine.id}>
 											<td>{vaccine.id}</td>
 											<td>{vaccine.name}</td>
-											<td>{vaccine.image}</td>
+											<td>{vaccine.imagineUrl}</td>
 											<td>{vaccine.description}</td>
 											<td>{vaccine.manufacturer}</td>
 											<td>{vaccine.quantity}</td>
 											<td>{vaccine.status}</td>
 											<td colSpan={2}>
-												<Button>Update</Button>
-												<Button>Delete</Button>
+												<Button variant="info" size="sm" className="mb-2">
+													Update
+												</Button>
+												<Button variant="danger" size="sm" className="mb-2">
+													Delete
+												</Button>
 											</td>
 										</tr>
 									))
@@ -96,7 +102,7 @@ function VaccineManage() {
 					</Container>
 				</Col>
 			</Row>
-		</>
+		</div>
 	);
 }
 

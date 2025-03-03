@@ -12,20 +12,20 @@ function AccountManage() {
 		fetch(accountAPI)
 			.then((response) => response.json())
 			.then((data) => {
-				setAccounts(data).result;
+				setAccounts(data.result);
 			})
 			.catch((error) => console.error("Error fetching accounts:", error));
 	}, []);
 
 	return (
-		<>
+		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>
 				<Sidebar />
 				<Col>
 					{console.log(accounts)}
-					<Container>
-						<h1>Account Manage</h1>
-						<hr></hr>
+					<Container className="py-4">
+						<h1 className="mb-4 text-primary">Account Management</h1>
+						<hr className="mb-4"></hr>
 						<Table striped bordered hover responsive>
 							<thead>
 								<tr>
@@ -57,14 +57,20 @@ function AccountManage() {
 											<td>{user.roleid}</td>
 											<td>{user.status}</td>
 											<td>
-												<Button variant="info">Update</Button>
-												<Button variant="danger">Delete</Button>
+												<Button variant="info" size="sm" className="me-2">
+													Update
+												</Button>
+												<Button variant="danger" size="sm" className="me-2">
+													Delete
+												</Button>
 											</td>
 										</tr>
 									))
 								) : (
 									<tr>
-										<td colSpan={11}>No data</td>
+										<td colSpan={11} className="text-center">
+											No data
+										</td>
 									</tr>
 								)}
 								{}
@@ -73,7 +79,7 @@ function AccountManage() {
 					</Container>
 				</Col>
 			</Row>
-		</>
+		</div>
 	);
 }
 

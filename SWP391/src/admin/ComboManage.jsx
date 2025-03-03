@@ -18,17 +18,23 @@ function ComboManage() {
 	}, []);
 
 	return (
-		<>
+		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>
 				<Sidebar />
 				<Col>
-					<Container>
-						<h1>Combo Vaccine Management</h1>
-						<Button variant="primary" onClick={() => setIsOpen(true)}>
-							Add New Combo
-						</Button>
+					<Container className="py-4">
+						<Row className="mb-4 align-items-center">
+							<Col>
+								<h1 className="text-primary">Combo Vaccine Management</h1>
+							</Col>
+							<Col className="text-end">
+								<Button variant="primary" onClick={() => setIsOpen(true)}>
+									Add New Combo
+								</Button>
+							</Col>
+						</Row>
 						{isOpen && <AddCombo setIsOpen={setIsOpen} open={isOpen} />}
-
+						<hr className="mb-4"></hr>
 						<Table striped bordered hover responsive>
 							<thead>
 								<tr>
@@ -64,121 +70,8 @@ function ComboManage() {
 					</Container>
 				</Col>
 			</Row>
-		</>
+		</div>
 	);
-	{
-		/* <Modal show={showModal} onHide={handleCloseModal} size="lg">
-				<Modal.Header closeButton>
-					<Modal.Title>Add New Combo Vaccine</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group className="mb-3" controlId="formGridComboName">
-							<Form.Label>Combo Name *</Form.Label>
-							<Form.Control type="text" placeholder="Enter Combo Name" value={comboName} onChange={(e) => setComboName(e.target.value)} isInvalid={!!errors.comboName} aria-label="Combo Name" />
-							<Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback>
-						</Form.Group>
-
-						<Form.Group className="mb-3" controlId="formGridComboDescription">
-							<Form.Label>Description</Form.Label>
-							<Form.Control as="textarea" rows={3} placeholder="Enter Combo Description" value={comboDescription} onChange={(e) => setComboDescription(e.target.value)} aria-label="Combo Description" />
-						</Form.Group>
-
-						<Form.Group className="mb-3" controlId="formGridVaccines">
-							<Form.Label>Select Vaccines *</Form.Label>
-							{errors.selectedVaccines && <div className="text-danger">{errors.selectedVaccines}</div>}
-							{vaccines.map((vaccine) => (
-								<div key={vaccine.id} className="mb-2">
-									<Form.Check
-										type="checkbox"
-										id={`vaccine-${vaccine.id}`}
-										label={vaccine.name}
-										checked={selectedVaccines.some((v) => v.vaccineId === vaccine.id)}
-										onChange={() => handleVaccineSelect(vaccine.id)}
-										inline
-									/>
-									{selectedVaccines.some((v) => v.vaccineId === vaccine.id) && (
-										<Form.Control
-											type="number"
-											min="1"
-											value={selectedVaccines.find((v) => v.vaccineId === vaccine.id).doses}
-											onChange={(e) => handleDoseChange(vaccine.id, e.target.value)}
-											style={{ width: "80px", display: "inline-block", marginLeft: "10px" }}
-										/>
-									)}
-								</div>
-							))}
-						</Form.Group>
-
-						<Row className="mb-3">
-							<Form.Group as={Col} controlId="formGridTargetAgeGroup">
-								<Form.Label>Target Age Group *</Form.Label>
-								<Form.Control
-									type="text"
-									placeholder="Enter Target Age Group (e.g., 0-6 months)"
-									value={targetAgeGroup}
-									onChange={(e) => setTargetAgeGroup(e.target.value)}
-									isInvalid={!!errors.targetAgeGroup}
-									aria-label="Target Age Group"
-								/>
-								<Form.Control.Feedback type="invalid">{errors.targetAgeGroup}</Form.Control.Feedback>
-							</Form.Group>
-
-							<Form.Group as={Col} controlId="formGridSalePercentage">
-								<Form.Label>Sale Percentage *</Form.Label>
-								<Form.Control
-									type="number"
-									placeholder="Enter Sale Percentage (0-100)"
-									value={salePercentage}
-									onChange={(e) => setSalePercentage(e.target.value)}
-									isInvalid={!!errors.salePercentage}
-									aria-label="Sale Percentage"
-								/>
-								<Form.Control.Feedback type="invalid">{errors.salePercentage}</Form.Control.Feedback>
-							</Form.Group>
-						</Row>
-						<Row className="mb-3">
-							<Form.Group as={Col} controlId="formGridComboCategory">
-								<Form.Label>Combo Category *</Form.Label>
-								<Form.Select value={comboCategory} onChange={(e) => setComboCategory(e.target.value)} isInvalid={!!errors.comboCategory} aria-label="Combo Category">
-									<option value="">Select a category...</option>
-									{comboCategories.map((category, index) => (
-										<option key={index} value={category}>
-											{category}
-										</option>
-									))}
-									<option value="New">Add New Category</option>
-								</Form.Select>
-								<Form.Control.Feedback type="invalid">{errors.comboCategory}</Form.Control.Feedback>
-							</Form.Group>
-
-							{comboCategory === "New" && (
-								<Form.Group as={Col} controlId="formGridNewComboCategory">
-									<Form.Label>New Category Name *</Form.Label>
-									<Form.Control
-										type="text"
-										placeholder="Enter New Category Name"
-										value={newComboCategory}
-										onChange={(e) => setNewComboCategory(e.target.value)}
-										isInvalid={!!errors.newComboCategory}
-										aria-label="New Category Name"
-									/>
-									<Form.Control.Feedback type="invalid">{errors.newComboCategory}</Form.Control.Feedback>
-								</Form.Group>
-							)}
-						</Row>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={handleCloseModal}>
-						Close
-					</Button>
-					<Button variant="primary" onClick={handleSaveCombo}>
-						Save Combo
-					</Button>
-				</Modal.Footer>
-			</Modal> */
-	}
 }
 
 export default ComboManage;
