@@ -7,7 +7,8 @@ function VaccineDetail() {
 	const [vaccine, setVaccine] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	// const vaccineAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/vaccine";
+	const vaccineAPI = "http://localhost:8080/vaccine/get";
 	const { id } = useParams();
 
 	useEffect(() => {

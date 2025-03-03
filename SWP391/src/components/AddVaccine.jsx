@@ -26,7 +26,7 @@ function AddVaccine({ setIsOpen, open }) {
 		// imageUrl: Yup.mixed().required("Vaccine Image is required"),
 		quantity: Yup.number().required("Quantity is required").min(0, "Quantity cannot be negative"),
 		price: Yup.number().required("Price is required").min(0, "Price cannot be negative"),
-		status: Yup.string().required("Status is required"),
+		status: Yup.boolean().required("Status is required"),
 	});
 
 	const formik = useFormik({
@@ -47,7 +47,7 @@ function AddVaccine({ setIsOpen, open }) {
 			imagineUrl: "https://example.com/vaccine-image.jpg",
 			quantity: 0,
 			price: 0,
-			status: "",
+			status: true,
 		},
 		onSubmit: (values) => {
 			handleAddVaccine(values);
@@ -282,7 +282,12 @@ function AddVaccine({ setIsOpen, open }) {
 
 							<Form.Group as={Col} controlId="status">
 								<Form.Label>Status</Form.Label>
-								<Form.Control type="text" placeholder="Enter Status" name="status" value={formik.values.status} onChange={formik.handleChange} isInvalid={formik.touched.status && formik.errors.status} />
+								{/* <Form.Control type="text" placeholder="Enter Status" name="status" value={formik.values.status} onChange={formik.handleChange} isInvalid={formik.touched.status && formik.errors.status} />
+								<Form.Control.Feedback type="invalid">{formik.errors.status}</Form.Control.Feedback> */}
+								<Form.Select name="status" value={formik.values.status} onChange={formik.handleChange} isInvalid={formik.touched.status && formik.errors.status}>
+									<option value="true">Available</option>
+									<option value="false">Not Available</option>
+								</Form.Select>
 								<Form.Control.Feedback type="invalid">{formik.errors.status}</Form.Control.Feedback>
 							</Form.Group>
 						</Row>

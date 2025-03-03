@@ -12,7 +12,7 @@ function VaccineList() {
 		fetch(vaccineAPI)
 			.then((response) => response.json())
 			.then((data) => {
-				setVaccinesList(data);
+				setVaccinesList(data.result);
 			})
 			.catch((error) => console.error("Error fetching vaccines:", error));
 	}, []);

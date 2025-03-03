@@ -6,22 +6,23 @@ function AccountManage() {
 	const [accounts, setAccounts] = useState([]);
 
 	// const accountAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/account";
-	const accountAPI = "http://localhost:8080/users";
+	const accountAPI = "http://localhost:8080/users/getAllUser";
 
 	useEffect(() => {
 		fetch(accountAPI)
 			.then((response) => response.json())
 			.then((data) => {
-				setAccounts(data);
+				setAccounts(data).result;
 			})
 			.catch((error) => console.error("Error fetching accounts:", error));
 	}, []);
 
 	return (
-		<Container>
+		<>
 			<Row>
 				<Sidebar />
 				<Col>
+					{console.log(accounts)}
 					<Container>
 						<h1>Account Manage</h1>
 						<hr></hr>
@@ -42,30 +43,37 @@ function AccountManage() {
 								</tr>
 							</thead>
 							<tbody>
-								{accounts.map((user) => (
-									<tr key={user.id}>
-										<td>{user.id}</td>
-										<td>{user.firstName}</td>
-										<td>{user.lastName}</td>
-										<td>{user.username}</td>
-										<td>{user.gender}</td>
-										<td>{user.email}</td>
-										<td>{user.phoneNumber}</td>
-										<td>{user.address}</td>
-										<td>{user.roleid}</td>
-										<td>{user.status}</td>
-										<td>
-											<Button variant="info">Update</Button>
-											<Button variant="danger">Delete</Button>
-										</td>
+								{accounts.length > 0 ? (
+									accounts.map((user) => (
+										<tr key={user.id}>
+											<td>{user.id}</td>
+											<td>{user.firstName}</td>
+											<td>{user.lastName}</td>
+											<td>{user.username}</td>
+											<td>{user.gender}</td>
+											<td>{user.email}</td>
+											<td>{user.phoneNumber}</td>
+											<td>{user.address}</td>
+											<td>{user.roleid}</td>
+											<td>{user.status}</td>
+											<td>
+												<Button variant="info">Update</Button>
+												<Button variant="danger">Delete</Button>
+											</td>
+										</tr>
+									))
+								) : (
+									<tr>
+										<td colSpan={11}>No data</td>
 									</tr>
-								))}
+								)}
+								{}
 							</tbody>
 						</Table>
 					</Container>
 				</Col>
 			</Row>
-		</Container>
+		</>
 	);
 }
 
