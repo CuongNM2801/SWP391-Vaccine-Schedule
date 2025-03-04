@@ -19,6 +19,8 @@ function VaccineManage() {
 			.catch((error) => console.error("Error fetching vaccines:", error));
 	}, []);
 
+	//Need pagination here. Max 10 items per
+
 	return (
 		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>

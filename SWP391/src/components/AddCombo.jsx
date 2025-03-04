@@ -1,10 +1,16 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row, Table } from "react-bootstrap";
 
 function AddCombo({ setIsOpen, open }) {
+	const searchVaccAPI = "http://localhost:8080/vaccine";
 	const addComboAPI = "http://localhost:8080/vaccine/combo/add";
-	const addComDetailAPI = "";
+	const addComDetailAPI = "http://localhost:8080/vaccine/combo/detail";
+
+	const [search, setSearch] = useState("");
+	const [searchResult, setSearchResult] = useState([]);
+
+	const [selectedVaccs, setSelectedVaccs] = useState([]);
 
 	const handleClose = () => setIsOpen(false); //Close modal
 
@@ -20,6 +26,21 @@ function AddCombo({ setIsOpen, open }) {
 		},
 	});
 
+	const handleSelectVaccine = (vaccine) => {
+		const isSelected = selectedVaccs.some((vac) => vac.id === vaccine.id);
+		if (isSelected) {
+			//Unchose the vaccine
+			setSelectedVaccs(selectedVaccs.filter((vac) => vac.id !== vaccine.id));
+		} else {
+			setSelectedVaccs([...selectedVaccs, { vaccine, dose: 0 }]);
+		}
+	};
+
+	const handleDoseChange = (vaccineId, dose) => {
+		setSelectedVaccs(selectedVaccs.map((v) => (v.id === vaccineId ? { ...v, dose: parseInt(dose, 10) } : v)));
+	};
+
+	//Add the vaccine combo first
 	const handleAddCombo = async (values) => {
 		try {
 			console.log(values);
@@ -32,8 +53,11 @@ function AddCombo({ setIsOpen, open }) {
 			});
 			if (response.ok) {
 				console.log("Add combo successful, proceed to adding combo detail");
-
-				handleClose();
+				//Get new id from the response
+				const responseData = await response.json();
+				const comboId = responseData.id;
+				console.log("id:", comboId);
+				handleAddComboDetail(values, comboId);
 			} else {
 				console.error("Adding combo failed: ", response.status);
 				alert("Adding combo failed. Please try again.");
@@ -41,6 +65,49 @@ function AddCombo({ setIsOpen, open }) {
 		} catch (err) {
 			console.error("Add combo error:", err);
 			alert("An error occurred during adding child. Please try again.");
+		}
+	};
+
+	//Add vaccine combo detail using the newly create comboId
+	const handleAddComboDetail = async (values, comboId) => {
+		try {
+			console.log(values, `comboId: ${comboId}`, selectedVaccs);
+			// const response = await fetch(addComDetailAPI + "/" + comboId + "/" + vaccineId);
+			for (const item of selectedVaccs) {
+				const response = await fetch(`${addComDetailAPI}/${comboId}/${item.vaccine.id}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(values),
+				});
+				if (response.ok) {
+					console.log("Add combo detail successful");
+				} else {
+					console.error("");
+				}
+			}
+		} catch (err) {
+			console.error("Add combo error:", err);
+			alert("An error occurred during adding child. Please try again.");
+		}
+	};
+
+	//Function search vaccine for the form
+	const handleSearch = async (search) => {
+		console.log(search);
+		try {
+			// const response = await fetch(searchVaccAPI + "/" + search);
+			const response = await fetch(`${searchVaccAPI}/${search}`);
+			if (response.ok) {
+				const data = await response.json();
+				setSearchResult(data.result);
+			} else {
+				console.error("Search error:", response.status);
+				alert("Something went wrong with the searching");
+			}
+		} catch (err) {
+			console.error("Search errror:", err);
 		}
 	};
 
@@ -65,12 +132,14 @@ function AddCombo({ setIsOpen, open }) {
 						<Row>
 							<Col>
 								<InputGroup className="mb-3">
-									<Form.Control placeholder="Vaccine name..." aria-label="Vaccine name" aria-describedby="basic-addon2" />
-									<Button variant="outline-secondary" id="button-addon2">
+									<Form.Control placeholder="Vaccine name..." aria-label="Vaccine name" name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+									<Button variant="outline-secondary" id="button-addon2" onClick={(e) => handleSearch(search)}>
 										Search
 									</Button>
 								</InputGroup>
+								Dang bi loi, nho fix
 								<Table striped bordered hover responsive>
+									{console.log(searchResult)}
 									<thead>
 										<tr>
 											<th></th>
@@ -81,20 +150,28 @@ function AddCombo({ setIsOpen, open }) {
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>
-												<Form.Check inline name="vaccineid" type={"checkbox"} id={`inline-checkbox-1`} />
-											</td>
-											<td>1</td>
-											<td>Covid 19</td>
-											<td>Covid</td>
-											<td>
-												<Form.Group className="mb-3" controlId="dose">
-													<Form.Control type="number" placeholder="Enter dose" name="dose" />
-													{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
-												</Form.Group>
-											</td>
-										</tr>
+										{searchResult.length > 0 ? (
+											searchResult.map((vaccine) => (
+												<tr key={vaccine.id}>
+													<td>
+														<Form.Check inline name="vaccineid" type={"checkbox"} checked={selectedVaccs.some((vac) => vac.id === vaccine.id)} onChange={() => handleSelectVaccine(vaccine)} />
+													</td>
+													<td>{vaccine.id}</td>
+													<td>{vaccine.name}</td>
+													<td>{vaccine.price}</td>
+													<td>
+														<Form.Group className="mb-3" controlId={`dose-${vaccine.id}`}>
+															<Form.Control type="number" placeholder="Enter dose" value={selectedVaccs.find((v) => v.id === vaccine.id)?.dose || 0} onChange={(e) => handleDoseChange(vaccine.id, e.target.value)} />
+															{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
+														</Form.Group>
+													</td>
+												</tr>
+											))
+										) : (
+											<tr>
+												<td colSpan={5}>No result</td>
+											</tr>
+										)}
 									</tbody>
 								</Table>
 							</Col>
