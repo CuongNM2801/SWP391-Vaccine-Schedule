@@ -45,8 +45,8 @@ function AccountManage() {
 							<tbody>
 								{accounts.length > 0 ? (
 									accounts.map((user) => (
-										<tr key={user.id}>
-											<td>{user.id}</td>
+										<tr key={user.accountId}>
+											<td>{user.accountId}</td>
 											<td>{user.firstName}</td>
 											<td>{user.lastName}</td>
 											<td>{user.username}</td>
@@ -54,7 +54,7 @@ function AccountManage() {
 											<td>{user.email}</td>
 											<td>{user.phoneNumber}</td>
 											<td>{user.address}</td>
-											<td>{user.roleid}</td>
+											<td>{user.roleName}</td>
 											<td>{user.status}</td>
 											<td>
 												<Button variant="info" size="sm" className="me-2">

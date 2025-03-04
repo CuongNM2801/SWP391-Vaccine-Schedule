@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
+import * as Yup from "yup";
 import { Button, Col, Form, InputGroup, Modal, Row, Table } from "react-bootstrap";
 
 function AddCombo({ setIsOpen, open }) {
@@ -14,6 +15,13 @@ function AddCombo({ setIsOpen, open }) {
 
 	const handleClose = () => setIsOpen(false); //Close modal
 
+	const validation = Yup.object({
+		comboName: Yup.string().required("Combo Name is required"),
+		description: Yup.string().required("Description is required").min(30, "Description must be at least 30 characters"),
+		saleOff: Yup.number().min(0, "Sale cannot be negative"),
+		ageGroup: Yup.string().required("Age group is required"),
+	});
+
 	const formik = useFormik({
 		initialValues: {
 			comboName: "",
@@ -24,6 +32,7 @@ function AddCombo({ setIsOpen, open }) {
 		onSubmit: (values) => {
 			handleAddCombo(values);
 		},
+		validationSchema: validation,
 	});
 
 	const handleSelectVaccine = (vaccine) => {
@@ -83,8 +92,10 @@ function AddCombo({ setIsOpen, open }) {
 				});
 				if (response.ok) {
 					console.log("Add combo detail successful");
+					alert("Adding combo successful");
+					handleClose();
 				} else {
-					console.error("");
+					console.error("Add combo detail error: ", response.status);
 				}
 			}
 		} catch (err) {
@@ -113,7 +124,7 @@ function AddCombo({ setIsOpen, open }) {
 
 	return (
 		<div>
-			<Modal show={open} onHide={handleClose} size="lg">
+			<Modal show={open} onHide={handleClose} size="xl">
 				<Form method="POST" onSubmit={formik.handleSubmit}>
 					<Modal.Header closeButton>
 						<Modal.Title>Add New Combo Vaccine</Modal.Title>
@@ -121,13 +132,28 @@ function AddCombo({ setIsOpen, open }) {
 					<Modal.Body>
 						<Form.Group className="mb-3" controlId="formGridComboName">
 							<Form.Label>Combo Name *</Form.Label>
-							<Form.Control type="text" placeholder="Enter Combo Name" name="comboName" value={formik.values.comboName} onChange={formik.handleChange} />
-							{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
+							<Form.Control
+								type="text"
+								placeholder="Enter Combo Name"
+								name="comboName"
+								value={formik.values.comboName}
+								onChange={formik.handleChange}
+								isInvalid={formik.touched.comboName && formik.errors.comboName}
+							/>
+							<Form.Control.Feedback type="invalid">{formik.errors.comboName}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formGridComboDescription">
 							<Form.Label>Description</Form.Label>
-							<Form.Control as="textarea" rows={3} placeholder="Enter Combo Description" name="description" value={formik.values.description} onChange={formik.handleChange} />
-							{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
+							<Form.Control
+								as="textarea"
+								rows={3}
+								placeholder="Enter Combo Description"
+								name="description"
+								value={formik.values.description}
+								onChange={formik.handleChange}
+								isInvalid={formik.touched.description && formik.errors.description}
+							/>
+							<Form.Control.Feedback type="invalid">{formik.errors.description}</Form.Control.Feedback>
 						</Form.Group>
 						<Row>
 							<Col>
@@ -177,14 +203,21 @@ function AddCombo({ setIsOpen, open }) {
 							</Col>
 							<Col>
 								<Form.Group className="mb-3" controlId="sale">
-									<Form.Label>Sale off</Form.Label>
-									<Form.Control type="number" placeholder="Enter sale" name="saleOff" />
-									{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
+									<Form.Label>Sale off (%)</Form.Label>
+									<Form.Control type="number" placeholder="Enter sale" name="saleOff" value={formik.values.saleOff} onChange={formik.handleChange} isInvalid={formik.touched.saleOff && formik.errors.saleOff} />
+									<Form.Control.Feedback type="invalid">{formik.errors.saleOff}</Form.Control.Feedback>
 								</Form.Group>
 								<Form.Group className="mb-3" controlId="ageGroup">
 									<Form.Label>Age group</Form.Label>
-									<Form.Control type="text" placeholder="Enter age group" name="ageGroup" />
-									{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
+									<Form.Control
+										type="text"
+										placeholder="Enter age group"
+										name="ageGroup"
+										value={formik.values.ageGroup}
+										onChange={formik.handleChange}
+										isInvalid={formik.touched.ageGroup && formik.errors.ageGroup}
+									/>
+									<Form.Control.Feedback type="invalid">{formik.errors.ageGroup}</Form.Control.Feedback>
 								</Form.Group>
 							</Col>
 						</Row>

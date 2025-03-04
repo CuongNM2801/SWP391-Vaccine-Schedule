@@ -17,7 +17,11 @@ function RegisterPage() {
 		confirmPassword: Yup.string()
 			.oneOf([Yup.ref("password"), null], "Passwords must match")
 			.required("Confirm password is required"),
-		email: Yup.string().email("Invalid email").required("Email is required").max(50, "Email must be at most 50 characters"),
+		email: Yup.string()
+			.email("Invalid email")
+			.matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Email must have a '.' after '@'")
+			.required("Email is required")
+			.max(50, "Email must be at most 50 characters"),
 		phoneNumber: Yup.string()
 			.required("Phone number is required")
 			.matches(/^0\d+$/, "Phone number must start with 0 and contain only digits")

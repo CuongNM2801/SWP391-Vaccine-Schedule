@@ -35,7 +35,7 @@ function AddVaccine({ setIsOpen, open }) {
 			description: "",
 			manufacturer: "",
 			category: "",
-			dosage: 0,
+			dosage: "",
 			contraindications: "",
 			precautions: "",
 			interactions: "",
@@ -44,10 +44,10 @@ function AddVaccine({ setIsOpen, open }) {
 			recommended: "",
 			preVaccination: "",
 			compatibility: "",
-			imagineUrl: "https://example.com/vaccine-image.jpg",
-			quantity: 0,
-			price: 0,
-			status: true,
+			imagineUrl: "https://example.com/vaccine-image.jpg", //Tam thoi de URL cho den khi su dung duoc Upload img
+			quantity: "",
+			price: "",
+			status: "",
 		},
 		onSubmit: (values) => {
 			handleAddVaccine(values);
@@ -275,7 +275,7 @@ function AddVaccine({ setIsOpen, open }) {
 							</Form.Group>
 
 							<Form.Group as={Col} controlId="price">
-								<Form.Label>Price</Form.Label>
+								<Form.Label>Unit Price ($)</Form.Label>
 								<Form.Control type="number" placeholder="Enter Price" name="price" value={formik.values.price} onChange={formik.handleChange} isInvalid={formik.touched.price && formik.errors.price} />
 								<Form.Control.Feedback type="invalid">{formik.errors.price}</Form.Control.Feedback>
 							</Form.Group>
