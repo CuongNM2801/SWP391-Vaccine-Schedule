@@ -5,14 +5,14 @@ import AddCombo from "../components/AddCombo";
 
 function ComboManage() {
 	const [combos, setCombos] = useState([]);
-	const comboAPI = "";
+	const comboAPI = "http://localhost:8080/vaccine/get/comboDetail";
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		fetch(comboAPI)
 			.then((response) => response.json())
 			.then((data) => {
-				setCombos(data);
+				setCombos(data.result);
 			})
 			.catch((error) => console.error("Error fetching combos:", error));
 	}, []);
@@ -23,6 +23,7 @@ function ComboManage() {
 				<Sidebar />
 				<Col>
 					<Container className="py-4">
+						{console.log(combos)}
 						<Row className="mb-4 align-items-center">
 							<Col>
 								<h1 className="text-primary">Combo Vaccine Management</h1>
@@ -44,20 +45,18 @@ function ComboManage() {
 									<th>Vaccines</th>
 									<th>Target Age Group</th>
 									<th>Sale %</th>
-									<th>Category</th>
 								</tr>
 							</thead>
 							<tbody>
 								{combos.length > 0 ? (
 									combos.map((combo) => (
-										<tr key={combo.id}>
-											<td>{combo.id}</td>
+										<tr key={combo.comboId}>
+											<td>{combo.comboId}</td>
 											<td>{combo.name}</td>
 											<td>{combo.description}</td>
-											<td>{formatVaccines(combo.vaccines)}</td>
-											<td>{combo.targetAgeGroup}</td>
-											<td>{combo.salePercentage}%</td>
-											<td>{combo.category}</td>
+											<td>{combo.vaccineId}</td>
+											<td>{combo.ageGroup}</td>
+											<td>{combo.saleOff}%</td>
 										</tr>
 									))
 								) : (

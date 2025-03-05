@@ -73,7 +73,6 @@ function AccountManage() {
 										</td>
 									</tr>
 								)}
-								{}
 							</tbody>
 						</Table>
 					</Container>
