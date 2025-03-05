@@ -96,7 +96,7 @@ function Navigation() {
 							<NavLink to={"/Dashboard"} className={"nav-link"}>
 								Admin Page
 							</NavLink>
-							<NavLink to={"#"} className={"nav-link"}>
+							<NavLink to={"/StaffPage"} className={"nav-link"}>
 								Staff Page
 							</NavLink>
 						</Nav>

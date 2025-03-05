@@ -19,13 +19,16 @@ import UserScheduling from "./pages/UserScheduling";
 import UserHistory from "./pages/UserHistory";
 import HealthRecord from "./pages/HealthRecord";
 import Dashboard from "./admin/Dashboard";
+import StaffHome from "./staff/StaffHome";
+import CheckIn from "./staff/CheckIn";
+import Schedule from "./staff/Schedule";
 
 function App() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
 	const isLoggedIn = !!token;
 
-	const ProtectedRoute = ({ element: Component, guestOnly, userOnly, adminOnly, ...rest }) => {
+	const ProtectedRoute = ({ element: Component, guestOnly, userOnly, adminOnly, staffOnly, ...rest }) => {
 		if (guestOnly && isLoggedIn) {
 			return <Navigate to="/" replace />;
 		}
@@ -35,6 +38,11 @@ function App() {
 
 		if (adminOnly && (!isLoggedIn || token.roleid !== "0")) {
 			// Assuming admin roleid is "0"
+			return <Navigate to="/" replace />;
+		}
+
+		if (staffOnly && (!isLoggedIn || token.roleid !== "1")) {
+			// Assuming staff roleid is "1"
 			return <Navigate to="/" replace />;
 		}
 
@@ -71,12 +79,22 @@ function App() {
 			<Route path={"/WorkSchedule"} element={<ProtectedRoute element={WorkSchedule} adminOnly />} />
 			 */}
 
+			{/*Staff only */}
+			{/* 
+			<Route path={"/StaffPage"} element={<ProtectedRoute element={StaffHome} staffOnly />} />
+			<Route path={"/CheckIn"} element={<ProtectedRoute element={CheckIn} staffOnly />} />
+			<Route path={"/Schedule"} element={<ProtectedRoute element={Schedule} staffOnly />} />
+			 */}
+
 			{/*Use this path only in developement. When role is OK, use the Admin only route */}
 			<Route path={"/Dashboard"} element={<ProtectedRoute element={Dashboard} userOnly />} />
 			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} userOnly />} />
 			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} userOnly />} />
 			<Route path={"/ManageCombo"} element={<ProtectedRoute element={ComboManage} userOnly />} />
 			<Route path={"/WorkSchedule"} element={<ProtectedRoute element={WorkSchedule} userOnly />} />
+			<Route path={"/StaffPage"} element={<ProtectedRoute element={StaffHome} userOnly />} />
+			<Route path={"/CheckIn"} element={<ProtectedRoute element={CheckIn} userOnly />} />
+			<Route path={"/Schedule"} element={<ProtectedRoute element={Schedule} userOnly />} />
 		</Routes>
 	);
 }
