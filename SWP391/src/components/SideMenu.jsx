@@ -7,6 +7,7 @@ function SideMenu() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
+
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
@@ -14,7 +15,7 @@ function SideMenu() {
 			try {
 				const decodedToken = jwtDecode(token);
 				console.log(decodedToken);
-				setUsername(decodedToken.sub);
+				setUsername(decodedToken.username);
 			} catch (err) {
 				console.error("Error decoding token:", err);
 			}

@@ -1,18 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "../components/Navbar";
 import { Button, Card, Col, Container, ListGroup, Row } from "react-bootstrap";
 import SideMenu from "../components/SideMenu";
 import UpdateUser from "../components/UpdateUser";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function UserProfile() {
+	const userAPI = "http://localhost:8080/users";
+
 	const token = localStorage.getItem("token");
+	const [username, setUsername] = useState("");
+	const [userId, setUserId] = useState("");
 	const [isOpen, setIsOpen] = useState(false); //use this to open user update form
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (token) {
+			const decodedToken = jwtDecode(token);
+			setUsername(decodedToken.username);
+			setUserId(decodedToken.sub);
+		} else {
+			navigate("/");
+		}
+	}, [navigate]);
 
 	return (
 		<div>
 			<Navigation />
 			<br />
 			<Container>
+				{console.log("UserId: ", userId)}
 				<Row>
 					<SideMenu />
 					<Col>

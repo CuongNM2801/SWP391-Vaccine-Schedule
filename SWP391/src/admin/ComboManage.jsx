@@ -52,9 +52,9 @@ function ComboManage() {
 									combos.map((combo) => (
 										<tr key={combo.comboId}>
 											<td>{combo.comboId}</td>
-											<td>{combo.name}</td>
+											<td>{combo.comboName}</td>
 											<td>{combo.description}</td>
-											<td>{combo.vaccineId}</td>
+											<td>{combo.vaccineName}</td>
 											<td>{combo.ageGroup}</td>
 											<td>{combo.saleOff}%</td>
 										</tr>

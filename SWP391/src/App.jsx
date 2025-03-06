@@ -26,6 +26,7 @@ import Schedule from "./staff/Schedule";
 function App() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
+
 	const isLoggedIn = !!token;
 
 	const ProtectedRoute = ({ element: Component, guestOnly, userOnly, adminOnly, staffOnly, ...rest }) => {
@@ -36,13 +37,13 @@ function App() {
 			return <Navigate to="/login" replace />;
 		}
 
-		if (adminOnly && (!isLoggedIn || token.roleid !== "0")) {
-			// Assuming admin roleid is "0"
+		if (adminOnly && (!isLoggedIn || token.scope !== "ADMIN")) {
+			// Admin roleid is "ADMIN"
 			return <Navigate to="/" replace />;
 		}
 
-		if (staffOnly && (!isLoggedIn || token.roleid !== "1")) {
-			// Assuming staff roleid is "1"
+		if (staffOnly && (!isLoggedIn || token.scope !== "STAFF")) {
+			// Staff roleid is "STAFF"
 			return <Navigate to="/" replace />;
 		}
 
@@ -86,7 +87,7 @@ function App() {
 			<Route path={"/Schedule"} element={<ProtectedRoute element={Schedule} staffOnly />} />
 			 */}
 
-			{/*Use this path only in developement. When role is OK, use the Admin only route */}
+			{/*Use this path only in developement. When role is OK, use the Admin and Staff only route */}
 			<Route path={"/Dashboard"} element={<ProtectedRoute element={Dashboard} userOnly />} />
 			<Route path={"/ManageAccount"} element={<ProtectedRoute element={AccountManage} userOnly />} />
 			<Route path={"/ManageVaccine"} element={<ProtectedRoute element={VaccineManage} userOnly />} />

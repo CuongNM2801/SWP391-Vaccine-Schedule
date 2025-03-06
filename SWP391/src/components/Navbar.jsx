@@ -15,8 +15,8 @@ function Navigation() {
 			setIsLoggedIn(true);
 			try {
 				const decodedToken = jwtDecode(token);
-				console.log(decodedToken);
-				setUsername(decodedToken.sub);
+				setUsername(decodedToken.username);
+				setRole(decodedToken.scope);
 			} catch (err) {
 				console.error("Error decoding token:", err);
 			}
@@ -91,7 +91,19 @@ function Navigation() {
 							Booking
 						</NavLink>
 					</Nav>
+					{/* 
 					{isLoggedIn && (
+						<Nav className="justify-content-end">
+							<NavLink to={"/Dashboard"} className={"nav-link"}>
+								Admin Page
+							</NavLink>
+							<NavLink to={"/StaffPage"} className={"nav-link"}>
+								Staff Page
+							</NavLink>
+						</Nav>
+					)}
+					 */}
+					{role == "ADMIN" && (
 						<Nav className="justify-content-end">
 							<NavLink to={"/Dashboard"} className={"nav-link"}>
 								Admin Page

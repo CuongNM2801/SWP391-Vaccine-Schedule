@@ -57,7 +57,7 @@ function WorkSchedule() {
 					<Container className="py-4">
 						<Row className="mb-4 align-items-center">
 							<Col>
-								<h1 className="text-primary">Vaccine Management</h1>
+								<h1 className="text-primary">Shift Management</h1>
 							</Col>
 							<Col className="text-end">
 								<Button variant="primary" onClick={() => setIsOpen(true)}>
