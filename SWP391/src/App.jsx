@@ -22,6 +22,7 @@ import Dashboard from "./admin/Dashboard";
 import StaffHome from "./staff/StaffHome";
 import CheckIn from "./staff/CheckIn";
 import Schedule from "./staff/Schedule";
+import TransactionPage from "./pages/TransactionPage";
 
 function App() {
 	const navigate = useNavigate();
@@ -70,6 +71,7 @@ function App() {
 			<Route path={"/Scheduling"} element={<ProtectedRoute element={UserScheduling} userOnly />} />
 			<Route path={"/History"} element={<ProtectedRoute element={UserHistory} userOnly />} />
 			<Route path={"/Record"} element={<ProtectedRoute element={HealthRecord} userOnly />} />
+			<Route path={"/Transaction"} element={<ProtectedRoute element={TransactionPage} userOnly />} />
 
 			{/*Admin only*/}
 			{/* 

@@ -1,20 +1,76 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../components/Navbar";
 import AddChild from "../components/AddChild";
-import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function BookingPage() {
-	const user = JSON.parse(localStorage.getItem("user"));
+	const vaccineAPI = "http://localhost:8080/vaccine";
+	const comboAPI = "http://localhost:8080/vaccine/get/comboDetail";
+	const token = localStorage.getItem("token");
+
+	const navigate = useNavigate();
+	const [vaccinesList, setVaccinesList] = useState([]);
+	const [comboList, setComboList] = useState([]);
+
+	const [type, setType] = useState("single");
+
 	const [isOpen, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		getVaccines();
+		getCombo();
+	}, []);
+
+	//Get list of single Vaccine
+	const getVaccines = async () => {
+		try {
+			const response = await fetch(`${vaccineAPI}/get`);
+			if (response.ok) {
+				const data = await response.json();
+				setVaccinesList(data.result);
+			} else {
+				console.error("Get vaccine error: ", response.status);
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	//Get list of Combo vaccine
+	const getCombo = async () => {
+		try {
+			const response = await fetch(`${comboAPI}`);
+			if (response.ok) {
+				const data = await response.json();
+				setComboList(data.result);
+			} else {
+				console.error("Get combo error: ", response.status);
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	//Change list depend on type (single or combo)
+	const handleTypeChange = (type) => {
+		setType(type);
+	};
+
+	const handleSubmit = () => {
+		navigate("/Transaction");
+	};
 
 	return (
 		<>
 			<Navigation />
 			<br />
 			<Container>
+				{console.log(vaccinesList)}
+				{console.log(comboList)}
 				<h2>Vaccination Booking</h2>
 				<br />
-				<Form>
+				<Form method="POST" onSubmit={handleSubmit}>
 					<InputGroup className="mb-3">
 						<Form.Select aria-label="Default select example">
 							<option>Choose child</option>
@@ -33,8 +89,44 @@ function BookingPage() {
 					<Row>
 						<Col>
 							<b>Choose vaccine type:</b>
-							<Button>Single</Button>
-							<Button>Combo</Button>
+							<ul>
+								<li>
+									<Form.Check label="Single" name="vaccineType" type="radio" id="single" checked={type === "single"} onChange={() => handleTypeChange("single")} />
+								</li>
+								<li>
+									<Form.Check label="Combo" name="vaccineType" type="radio" id="combo" checked={type === "combo"} onChange={() => handleTypeChange("combo")} />
+								</li>
+							</ul>
+							{type === "single" && (
+								<div className="mt-3">
+									<b>Choose vaccines:</b>
+									{vaccinesList.map((vaccine) => (
+										<Card key={vaccine.id} className="mb-2">
+											<Card.Body>
+												<Form.Check
+													label={vaccine.name}
+													// onChange={(e) => handleVaccineSelection(vaccine, e.target.checked)}
+												/>
+											</Card.Body>
+										</Card>
+									))}
+								</div>
+							)}
+							{type === "combo" && (
+								<div className="mt-3">
+									<b>Choose combo:</b>
+									{comboList.map((combo) => (
+										<Card key={combo.id} className="mb-2">
+											<Card.Body>
+												<Form.Check
+													label={combo.comboName}
+													// onChange={(e) => handleVaccineSelection(vaccine, e.target.checked)}
+												/>
+											</Card.Body>
+										</Card>
+									))}
+								</div>
+							)}
 						</Col>
 						<Col>
 							<Form.Group className="mb-3" controlId="vaccinationDate">
@@ -49,8 +141,8 @@ function BookingPage() {
 								</Form.Label>
 								<br />
 								<Form.Check defaultChecked label="Payment by credit card." name="payment" type="radio" id="credit" value="credit" />
-								<Form.Check label="Cash payment at the cashier." name="payment" type="radio" id="cash" value="cash" />
-								<Form.Check label="Payment via e-commerce applications, mobile payment services, VNPAY-QR e-wallets, Momo,..." name="payment" type="radio" id="app" value="app" />
+								<Form.Check label="Cash payment at the cashier." name="payment" type="radio" id="cash" value="cash" disabled />
+								<Form.Check label="Payment via e-commerce applications, mobile payment services, VNPAY-QR e-wallets, Momo,..." name="payment" type="radio" id="app" value="app" disabled />
 							</Form.Group>
 							<Button type="submit">Proceed</Button>
 						</Col>

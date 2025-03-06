@@ -4,7 +4,6 @@ import { Button, Form, Modal } from "react-bootstrap";
 function UpdateRole({ setIsOpen, open, userId }) {
 	const token = localStorage.getItem("token");
 	const userAPI = "http://localhost:8080/users";
-	const [user, setUser] = useState();
 	const [role, setRole] = useState();
 	const [status, setStatus] = useState(true);
 
@@ -46,7 +45,7 @@ function UpdateRole({ setIsOpen, open, userId }) {
 	const handleSubmit = async () => {
 		try {
 			const response = await fetch(`${userAPI}/${userId}`, {
-				method: "PUT",
+				method: "PATCH",
 				headers: {
 					Authorization: `Bearer ${token}`,
 					"Content-type": "application/json",

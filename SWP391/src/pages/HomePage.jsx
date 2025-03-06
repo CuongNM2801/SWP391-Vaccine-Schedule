@@ -43,7 +43,6 @@ function HomePage() {
 				</div>
 
 				<Row xs={1} md={2} lg={4} className="g-4">
-					{console.log(randomVaccines)}
 					{randomVaccines.map((vaccine) => (
 						<Col key={vaccine.id}>
 							<Card className="h-100 shadow-sm">

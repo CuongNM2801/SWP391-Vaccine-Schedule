@@ -10,7 +10,7 @@ function UserProfile() {
 	const userAPI = "http://localhost:8080/users";
 
 	const token = localStorage.getItem("token");
-	const [username, setUsername] = useState("");
+	const [user, setUser] = useState();
 	const [userId, setUserId] = useState("");
 	const [isOpen, setIsOpen] = useState(false); //use this to open user update form
 	const navigate = useNavigate();
@@ -18,19 +18,43 @@ function UserProfile() {
 	useEffect(() => {
 		if (token) {
 			const decodedToken = jwtDecode(token);
-			setUsername(decodedToken.username);
 			setUserId(decodedToken.sub);
 		} else {
 			navigate("/");
 		}
 	}, [navigate]);
 
+	useEffect(() => {
+		if (userId) {
+			getUser(userId);
+		}
+	}, [userId]);
+
+	const getUser = async (userId) => {
+		try {
+			const response = await fetch(`${userAPI}/${userId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (response.ok) {
+				const data = await response.json();
+				setUser(data.result);
+			} else {
+				console.error(response.status);
+			}
+		} catch (err) {
+			console.error("Get user failed: ", err);
+		}
+	};
+
 	return (
 		<div>
 			<Navigation />
 			<br />
 			<Container>
-				{console.log("UserId: ", userId)}
+				{console.log(user)}
 				<Row>
 					<SideMenu />
 					<Col>
@@ -40,11 +64,13 @@ function UserProfile() {
 							<Card style={{ width: "18rem" }}>
 								<Card.Img variant="top" src="src/alt/notfound.jpg" />
 								<ListGroup className="list-group-flush">
-									<ListGroup.Item>Fullname: ...</ListGroup.Item>
-									<ListGroup.Item>Gender: ...</ListGroup.Item>
-									<ListGroup.Item>Email: ...</ListGroup.Item>
-									<ListGroup.Item>Phone number: ...</ListGroup.Item>
-									<ListGroup.Item>Address: ...</ListGroup.Item>
+									<ListGroup.Item>
+										Fullname: {user.firstName} {user.lastName}
+									</ListGroup.Item>
+									<ListGroup.Item>Gender: {user.gender}</ListGroup.Item>
+									<ListGroup.Item>Email: {user.email}</ListGroup.Item>
+									<ListGroup.Item>Phone number: {user.phoneNumber}</ListGroup.Item>
+									<ListGroup.Item>Address: {user.address}</ListGroup.Item>
 								</ListGroup>
 								<Card.Body>
 									<Button

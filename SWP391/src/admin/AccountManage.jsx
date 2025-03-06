@@ -46,6 +46,7 @@ function AccountManage() {
 			<Row>
 				<Sidebar />
 				<Col>
+					{console.log(accounts)}
 					<Container className="py-4">
 						<h1 className="mb-4 text-primary">Account Management</h1>
 						<hr className="mb-4"></hr>
