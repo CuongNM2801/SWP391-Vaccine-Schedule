@@ -36,17 +36,17 @@ function AddCombo({ setIsOpen, open }) {
 	});
 
 	const handleSelectVaccine = (vaccine) => {
-		const isSelected = selectedVaccs.some((vac) => vac.id === vaccine.id);
+		const isSelected = selectedVaccs.some((vac) => vac.vaccine.id === vaccine.id);
 		if (isSelected) {
 			//Unchose the vaccine
-			setSelectedVaccs(selectedVaccs.filter((vac) => vac.id !== vaccine.id));
+			setSelectedVaccs(selectedVaccs.filter((vac) => vac.vaccine.id !== vaccine.id));
 		} else {
 			setSelectedVaccs([...selectedVaccs, { vaccine, dose: 0 }]);
 		}
 	};
 
 	const handleDoseChange = (vaccineId, dose) => {
-		setSelectedVaccs(selectedVaccs.map((v) => (v.id === vaccineId ? { ...v, dose: parseInt(dose, 10) } : v)));
+		setSelectedVaccs(selectedVaccs.map((v) => (v.vaccine.id === vaccineId ? { ...v, dose: parseInt(dose, 10) } : v)));
 	};
 
 	//Add the vaccine combo first
@@ -180,14 +180,19 @@ function AddCombo({ setIsOpen, open }) {
 											searchResult.map((vaccine) => (
 												<tr key={vaccine.id}>
 													<td>
-														<Form.Check inline name="vaccineid" type={"checkbox"} checked={selectedVaccs.some((vac) => vac.id === vaccine.id)} onChange={() => handleSelectVaccine(vaccine)} />
+														<Form.Check inline name="vaccineid" type={"checkbox"} checked={selectedVaccs.some((vac) => vac.vaccine.id === vaccine.id)} onChange={() => handleSelectVaccine(vaccine)} />
 													</td>
 													<td>{vaccine.id}</td>
 													<td>{vaccine.name}</td>
 													<td>{vaccine.price}</td>
 													<td>
 														<Form.Group className="mb-3" controlId={`dose-${vaccine.id}`}>
-															<Form.Control type="number" placeholder="Enter dose" value={selectedVaccs.find((v) => v.id === vaccine.id)?.dose || 0} onChange={(e) => handleDoseChange(vaccine.id, e.target.value)} />
+															<Form.Control
+																type="number"
+																placeholder="Enter dose"
+																value={selectedVaccs.find((v) => v.vaccine.id === vaccine.id)?.dose || 0}
+																onChange={(e) => handleDoseChange(vaccine.id, e.target.value)}
+															/>
 															{/* <Form.Control.Feedback type="invalid">{errors.comboName}</Form.Control.Feedback> */}
 														</Form.Group>
 													</td>

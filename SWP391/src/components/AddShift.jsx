@@ -2,11 +2,34 @@ import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 function AddShift({ setIsOpen, open }) {
+	const token = localStorage.getItem("token");
+	const shiftAPI = "http://localhost:8080/working";
+
 	const [repeat, setRepeat] = useState(false);
 
 	const handleClose = () => setIsOpen(false); //Close modal
 
 	const handleRepeat = (e) => setRepeat(e.target.checked);
+
+	const handleSubmit = async (values) => {
+		try {
+			const response = await fetch(`${shiftAPI}/add`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+			if (response.ok) {
+				handleClose();
+			} else {
+				console.log("Adding shift error: ", response.status);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	return (
 		<div>
@@ -33,7 +56,29 @@ function AddShift({ setIsOpen, open }) {
 									<Form.Control type="date" />
 								</Form.Group>
 							</Col>
+							{/* <Col>
+								<Form.Group className="mb-3" controlId="endDate">
+									<Form.Label>Start time</Form.Label>
+									<Form.Control type="time" />
+								</Form.Group>
+							</Col>
+							<Col>
+								<Form.Group className="mb-3" controlId="endDate">
+									<Form.Label>End time</Form.Label>
+									<Form.Control type="time" />
+								</Form.Group>
+							</Col> */}
+							<Col>
+								<Form.Group className="mb-3">
+									<Form.Label>Shift type</Form.Label>
+									<Form.Select aria-label="Type">
+										<option>---Select---</option>
+										<option value="HC">Hanh Chinh</option>
+									</Form.Select>
+								</Form.Group>
+							</Col>
 						</Row>
+
 						<Form.Check type="switch" id="custom-switch" label="Repeat" checked={repeat} onChange={handleRepeat} />
 						{repeat && (
 							<>
@@ -41,7 +86,7 @@ function AddShift({ setIsOpen, open }) {
 									<Form.Label>Repeat every</Form.Label>
 									<Form.Select>
 										<option value="week">Week</option>
-										<option value="month">Month</option>
+										{/* <option value="month">Month</option> */}
 									</Form.Select>
 								</Form.Group>
 								<Form.Group className="mb-3">

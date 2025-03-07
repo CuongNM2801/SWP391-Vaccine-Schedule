@@ -12,10 +12,32 @@ function ComboManage() {
 		fetch(comboAPI)
 			.then((response) => response.json())
 			.then((data) => {
-				setCombos(data.result);
+				// setCombos(data.result);
+				const groupedCombos = groupCombos(data.result);
+				setCombos(groupedCombos);
 			})
 			.catch((error) => console.error("Error fetching combos:", error));
 	}, []);
+
+	//Group vaccine with the same comboId
+	const groupCombos = (combosData) => {
+		const grouped = {};
+		combosData.forEach((combo) => {
+			if (!grouped[combo.comboId]) {
+				grouped[combo.comboId] = {
+					comboId: combo.comboId,
+					comboName: combo.comboName,
+					description: combo.description,
+					ageGroup: combo.ageGroup,
+					saleOff: combo.saleOff,
+					vaccines: [], // Initialize vaccines array
+				};
+			}
+			grouped[combo.comboId].vaccines.push(combo.vaccineName);
+		});
+		// Convert grouped object to array
+		return Object.values(grouped);
+	};
 
 	return (
 		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
@@ -54,7 +76,8 @@ function ComboManage() {
 											<td>{combo.comboId}</td>
 											<td>{combo.comboName}</td>
 											<td>{combo.description}</td>
-											<td>{combo.vaccineName}</td>
+											{/* <td>{combo.vaccineName}</td> */}
+											<td>{combo.vaccines.join(", ")}</td>
 											<td>{combo.ageGroup}</td>
 											<td>{combo.saleOff}%</td>
 										</tr>

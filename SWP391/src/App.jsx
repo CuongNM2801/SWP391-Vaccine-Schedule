@@ -23,10 +23,15 @@ import StaffHome from "./staff/StaffHome";
 import CheckIn from "./staff/CheckIn";
 import Schedule from "./staff/Schedule";
 import TransactionPage from "./pages/TransactionPage";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
+	let decodedToken = "";
+	if (token) {
+		decodedToken = jwtDecode(token);
+	}
 
 	const isLoggedIn = !!token;
 
@@ -38,12 +43,12 @@ function App() {
 			return <Navigate to="/login" replace />;
 		}
 
-		if (adminOnly && (!isLoggedIn || token.scope !== "ADMIN")) {
+		if (adminOnly && (!isLoggedIn || decodedToken.scope !== "ADMIN")) {
 			// Admin roleid is "ADMIN"
 			return <Navigate to="/" replace />;
 		}
 
-		if (staffOnly && (!isLoggedIn || token.scope !== "STAFF")) {
+		if (staffOnly && (!isLoggedIn || decodedToken.scope !== "STAFF")) {
 			// Staff roleid is "STAFF"
 			return <Navigate to="/" replace />;
 		}
@@ -53,6 +58,7 @@ function App() {
 
 	return (
 		<Routes>
+			{console.log(decodedToken)}
 			<Route path={"/"} element={<HomePage />} />
 			<Route path={"/AboutUs"} element={<AboutUsPage />} />
 			<Route path={"/PriceList"} element={<PriceListPage />} />

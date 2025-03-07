@@ -37,7 +37,7 @@ function BookingPage() {
 		}
 	};
 
-	//Get list of Combo vaccine
+	//Get list of Combo
 	const getCombo = async () => {
 		try {
 			const response = await fetch(`${comboAPI}`);
@@ -70,7 +70,7 @@ function BookingPage() {
 				{console.log(comboList)}
 				<h2>Vaccination Booking</h2>
 				<br />
-				<Form method="POST" onSubmit={handleSubmit}>
+				<Form method="POST">
 					<InputGroup className="mb-3">
 						<Form.Select aria-label="Default select example">
 							<option>Choose child</option>
@@ -144,7 +144,7 @@ function BookingPage() {
 								<Form.Check label="Cash payment at the cashier." name="payment" type="radio" id="cash" value="cash" disabled />
 								<Form.Check label="Payment via e-commerce applications, mobile payment services, VNPAY-QR e-wallets, Momo,..." name="payment" type="radio" id="app" value="app" disabled />
 							</Form.Group>
-							<Button type="submit">Proceed</Button>
+							<Button onClick={handleSubmit}>Proceed</Button>
 						</Col>
 					</Row>
 				</Form>
