@@ -43,13 +43,35 @@ function BookingPage() {
 			const response = await fetch(`${comboAPI}`);
 			if (response.ok) {
 				const data = await response.json();
-				setComboList(data.result);
+				// setComboList(data.result);
+				const groupedCombos = groupCombos(data.result);
+				setComboList(groupedCombos);
 			} else {
 				console.error("Get combo error: ", response.status);
 			}
 		} catch (err) {
 			console.error(err);
 		}
+	};
+
+	//Group vaccine with the same comboId
+	const groupCombos = (combosData) => {
+		const grouped = {};
+		combosData.forEach((combo) => {
+			if (!grouped[combo.comboId]) {
+				grouped[combo.comboId] = {
+					comboId: combo.comboId,
+					comboName: combo.comboName,
+					description: combo.description,
+					ageGroup: combo.ageGroup,
+					saleOff: combo.saleOff,
+					vaccines: [], // Initialize vaccines array
+				};
+			}
+			grouped[combo.comboId].vaccines.push(combo.vaccineName);
+		});
+		// Convert grouped object to array
+		return Object.values(grouped);
 	};
 
 	//Change list depend on type (single or combo)
@@ -107,6 +129,7 @@ function BookingPage() {
 													label={vaccine.name}
 													// onChange={(e) => handleVaccineSelection(vaccine, e.target.checked)}
 												/>
+												<Card.Text>{vaccine.price}$</Card.Text>
 											</Card.Body>
 										</Card>
 									))}
@@ -122,6 +145,7 @@ function BookingPage() {
 													label={combo.comboName}
 													// onChange={(e) => handleVaccineSelection(vaccine, e.target.checked)}
 												/>
+												<Card.Text>{combo.vaccines.join(", ")}</Card.Text>
 											</Card.Body>
 										</Card>
 									))}
