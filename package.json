@@ -12,6 +12,7 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^3.4.0",
     "@stripe/stripe-js": "^6.0.0",
+    "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.3",
     "bootstrap": "^5.3.3",
     "formik": "^2.4.6",
@@ -20,6 +21,7 @@
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
+    "tailwindcss": "^4.0.14",
     "yup": "^1.6.1"
   },
   "devDependencies": {

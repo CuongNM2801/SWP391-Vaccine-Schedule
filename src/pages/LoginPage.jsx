@@ -19,27 +19,6 @@ function LoginPage() {
 	});
 
 	const handleLogin = async (values) => {
-		// try {
-		// 	const response = await fetch(accountAPI);
-		// 	if (!response.ok) {
-		// 		throw new Error(`HTTP error! status: ${response.status}`);
-		// 	}
-		// 	const accounts = await response.json();
-		// 	console.log(accounts);
-		// 	const user = accounts.find((account) => account.username === values.username && account.password === values.password);
-
-		// 	if (user) {
-		// 		console.log("Login successful:", user);
-		// 		localStorage.setItem("user", JSON.stringify(user));
-		// 		navigate("/");
-		// 	} else {
-		// 		console.log("Login failed: Invalid username or password");
-		// 		alert("Invalid username or password");
-		// 	}
-		// } catch (error) {
-		// 	console.error("Login error:", error);
-		// 	alert("An error occurred during login. Please try again.");
-		// }
 		const response = await fetch(accountAPI, {
 			method: "POST",
 			headers: {

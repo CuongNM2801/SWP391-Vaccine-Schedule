@@ -69,7 +69,7 @@ function UserChildren() {
 			<Navigation />
 			<br />
 			<Container>
-				{console.log(childs)}
+				{/* {console.log(childs)} */}
 				<Row>
 					<SideMenu />
 					<Col>

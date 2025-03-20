@@ -214,7 +214,7 @@ function TransactionPage() {
 
 	return (
 		<div>
-			{console.log(selectedVaccine, selectedCombo, child, vaccinationDate, payment, type)}
+			{/* {console.log(selectedVaccine, selectedCombo, child, vaccinationDate, payment, type)} */}
 			<Navigation />
 			<br />
 			<Container>

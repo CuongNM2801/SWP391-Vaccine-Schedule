@@ -11,7 +11,7 @@ function ComboManage() {
 	const [searchCategory, setSearchCategory] = useState("");
 	const [sortOption, setSortOption] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
-	const itemsPerPage = 10; // Number of items per page
+	const itemsPerPage = 4; // Number of items per page
 
 	useEffect(() => {
 		getCombo();
@@ -73,11 +73,9 @@ function ComboManage() {
 	const indexOfFirstItems = indexOfLastItems - itemsPerPage;
 	const currentCombos = searchCombo().slice(indexOfFirstItems, indexOfLastItems); //Ensure list not empty
 	const totalPages = Math.ceil(searchCombo().length / itemsPerPage);
-
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber);
 	};
-
 	let items = [];
 	for (let number = 1; number <= totalPages; number++) {
 		items.push(
@@ -86,7 +84,6 @@ function ComboManage() {
 			</Pagination.Item>
 		);
 	}
-
 	const pagination = (
 		<Pagination>
 			<Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
@@ -97,16 +94,23 @@ function ComboManage() {
 		</Pagination>
 	);
 
+	const highlightComboRows = (comboId) => {
+		document.querySelectorAll(`[data-combo-id="${comboId}"]`).forEach((row) => row.classList.add("bg-blue-200"));
+	};
+
+	const removeHighlight = (comboId) => {
+		document.querySelectorAll(`[data-combo-id="${comboId}"]`).forEach((row) => row.classList.remove("bg-blue-200"));
+	};
+
 	return (
 		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>
 				<Sidebar />
 				<Col lg={10}>
 					<Container className="py-4">
-						{/* {console.log(combos)} */}
-						<Row className="mb-4 align-items-center">
+						<Row className="mb-4 items-center">
 							<Col>
-								<h1 className="text-primary">Combo Vaccine Management</h1>
+								<h1 className="text-primary text-2xl font-bold">Combo Vaccine Management</h1>
 							</Col>
 							<Col className="text-end">
 								<Button variant="primary" onClick={() => setIsOpen(true)}>
@@ -116,23 +120,25 @@ function ComboManage() {
 						</Row>
 						{isOpen && <AddCombo setIsOpen={setIsOpen} open={isOpen} />}
 						<hr className="mb-4"></hr>
-						<Container>
-							<Row className="mb-3">
+
+						{/* Search Bar Section */}
+						<Container className="bg-gray-100 p-3 rounded-md shadow-sm mb-4">
+							<Row className="mb-3 align-items-center">
 								<Col md={4}>
 									<h4>Search:</h4>
 								</Col>
 								<Col md={3}>
-									<Form.Control type="text" placeholder="Search Combo Name" value={searchName} onChange={(e) => setSearchName(e.target.value)} />
+									<Form.Control type="text" placeholder="Search Combo Name" value={searchName} onChange={(e) => setSearchName(e.target.value)} className="rounded-md" />
 								</Col>
 								<Col md={3}>
-									<Form.Select value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)}>
+									<Form.Select value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} className="rounded-md">
 										<option value="">---Category---</option>
 										<option value="kids">Combo for kids</option>
 										<option value="preschool">Combo for preschool children</option>
 									</Form.Select>
 								</Col>
 								<Col md={2}>
-									<Form.Select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+									<Form.Select value={sortOption} onChange={(e) => setSortOption(e.target.value)} className="rounded-md">
 										<option value="">---Sort---</option>
 										<option value="priceAsc">Price Ascending</option>
 										<option value="priceDes">Price Descending</option>
@@ -140,119 +146,78 @@ function ComboManage() {
 								</Col>
 							</Row>
 						</Container>
-						<Table striped hover responsive bordered>
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Combo Name</th>
-									<th>Combo Category</th>
-									<th>Description</th>
-									<th>Included Vaccine</th>
-									<th>Vaccine Manufacturer</th>
-									<th>Vaccine Dose</th>
-									<th>Sale Off</th>
-									<th>Total Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								{currentCombos.length > 0 ? (
-									currentCombos.map((combo) => (
-										<tr key={combo.comboId}>
-											<td>{combo.comboId}</td>
-											<td>{combo.comboName}</td>
-											<td>{combo.comboCategory}</td>
-											<td>{combo.description}</td>
-											<td>
-												{combo.vaccines.map((v, index, array) => (
-													<React.Fragment key={index}>
-														{v.name}
-														{index < array.length - 1 && <br />}
-													</React.Fragment>
-												))}
-											</td>
-											<td>
-												{combo.vaccines.map((v, index, array) => (
-													<React.Fragment key={index}>
-														{v.manufacturer}
-														{index < array.length - 1 && <br />}
-													</React.Fragment>
-												))}
-											</td>
-											<td>
-												{combo.vaccines.map((v, index, array) => (
-													<React.Fragment key={index}>
-														{v.dose}
-														{index < array.length - 1 && <br />}
-													</React.Fragment>
-												))}
-											</td>
-											<td>{combo.saleOff}</td>
-											<td>{parseFloat(combo.total).toFixed(2)}</td>
-										</tr>
-									))
-								) : (
+
+						{/* Table Section */}
+						{/* Fuck this part */}
+						<div className="bg-white shadow-md rounded-lg p-4">
+							<Table className="w-full border border-gray-200 rounded-lg overflow-hidden">
+								<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
 									<tr>
-										<td colSpan={9} align="center">
-											No Result
-										</td>
+										<th className="px-4 py-2 text-left">Id</th>
+										<th className="px-4 py-2 text-left">Combo Name</th>
+										{/* <th className="px-4 py-2 text-left">Combo Category</th> */}
+										{/* <th className="px-4 py-2 text-left">Description</th> */}
+										<th className="px-4 py-2 text-left">Included Vaccine</th>
+										<th className="px-4 py-2 text-left">Vaccine Manufacturer</th>
+										<th className="px-4 py-2 text-left">Vaccine Dose</th>
+										<th className="px-4 py-2 text-left">Sale Off</th>
+										<th className="px-4 py-2 text-left">Total Price</th>
+										<th className="px-4 py-2 text-left">Actions</th>
 									</tr>
-								)}
-							</tbody>
-						</Table>
-						{pagination}
+								</thead>
+								<tbody>
+									{currentCombos.length > 0 ? (
+										currentCombos.flatMap((combo) =>
+											combo.vaccines.map((vaccine, index) => (
+												<tr
+													key={`${combo.comboId}-${index}`}
+													data-combo-id={combo.comboId} // Assign comboId for grouping
+													className="border-b border-gray-200 hover:bg-blue-100 transition-colors"
+													onMouseEnter={() => highlightComboRows(combo.comboId)}
+													onMouseLeave={() => removeHighlight(combo.comboId)}>
+													{index === 0 && (
+														<>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center">
+																{combo.comboId}
+															</td>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center">
+																{combo.comboName}
+															</td>
+														</>
+													)}
+													<td className="truncate">{vaccine.name}</td>
+													<td className="truncate">{vaccine.manufacturer}</td>
+													<td className="truncate">{vaccine.dose}</td>
+													{index === 0 && (
+														<>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2">
+																{combo.saleOff}
+															</td>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2">
+																{parseFloat(combo.total).toFixed(2)}
+															</td>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2"></td>
+														</>
+													)}
+												</tr>
+											))
+										)
+									) : (
+										<tr>
+											<td colSpan={9} align="center">
+												No Result
+											</td>
+										</tr>
+									)}
+								</tbody>
+							</Table>
+
+							{/* Pagination Centered */}
+							<div className="text-center mt-3">{pagination}</div>
+						</div>
 					</Container>
 				</Col>
 			</Row>
-			{/* 			
-			<Accordion alwaysOpen>
-							{combos.length > 0 ? (
-								combos.map((combo) => (
-									<Accordion.Item eventKey={combo.comboId} key={combo.comboId} className="mb-3">
-										<Accordion.Header className="bg-light">
-											<div className="d-flex justify-content-between w-100">
-												<span className="fw-bold">{combo.comboName}</span>
-												<span>
-													<b>Total Price: </b> {parseFloat(combo.total).toFixed(2)}
-												</span>
-											</div>
-										</Accordion.Header>
-										<Accordion.Body>
-											<p>
-												<b>Description:</b> {combo.description}
-											</p>
-											<p>
-												<b>Combo category:</b> {combo.comboCategory}
-											</p>
-											<p>
-												<b>Sale off:</b> {combo.saleOff}
-											</p>
-											<Table striped bordered hover responsive className="table-sm">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Vaccine name</th>
-														<th>Manufacturer</th>
-														<th>Dose</th>
-													</tr>
-												</thead>
-												<tbody>
-													{combo.vaccines.map((vaccine, index) => (
-														<tr key={index}>
-															<td>{index + 1}</td>
-															<td>{vaccine.name}</td>
-															<td>{vaccine.manufacturer}</td>
-															<td>{vaccine.dose}</td>
-														</tr>
-													))}
-												</tbody>
-											</Table>
-										</Accordion.Body>
-									</Accordion.Item>
-								))
-							) : (
-								<p className="text-center mt-3">No data</p>
-							)}
-						</Accordion> */}
 		</div>
 	);
 }

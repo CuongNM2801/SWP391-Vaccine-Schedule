@@ -12,7 +12,7 @@ function VaccineManage() {
 	const [searchManufacturer, setSearchManufacturer] = useState("");
 	const [sortOption, setSortOption] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
-	const itemsPerPage = 5; // Number of items per page
+	const itemsPerPage = 6; // Number of items per page
 
 	useEffect(() => {
 		getVaccine();
@@ -95,10 +95,10 @@ function VaccineManage() {
 				<Sidebar />
 				<Col lg={10}>
 					<Container className="py-4">
-						{console.log(vaccineList, currentVaccines)}
+						{/* {console.log(vaccineList, currentVaccines)} */}
 						<Row className="mb-4 align-items-center">
 							<Col>
-								<h1 className="text-primary">Vaccine Management</h1>
+								<h1 className="text-primary text-2xl font-bold">Vaccine Management</h1>
 							</Col>
 							<Col className="text-end">
 								<Button variant="primary" onClick={() => setIsOpen(true)}>
@@ -108,19 +108,21 @@ function VaccineManage() {
 						</Row>
 						{isOpen && <AddVaccine setIsOpen={setIsOpen} open={isOpen} onAdded={handleVaccineAdded} />}
 						<hr className="mb-4"></hr>
-						<Container>
-							<Row className="mb-3">
+
+						{/* Search Bar Section */}
+						<Container className="bg-gray-100 p-3 rounded-md shadow-sm mb-4">
+							<Row className="mb-3 align-items-center">
 								<Col md={4}>
 									<h4>Search:</h4>
 								</Col>
 								<Col md={3}>
-									<Form.Control type="text" placeholder="Search Vaccine Name" value={searchName} onChange={(e) => setSearchName(e.target.value)} />
+									<Form.Control type="text" placeholder="Search Vaccine Name" value={searchName} onChange={(e) => setSearchName(e.target.value)} className="rounded-md" />
 								</Col>
 								<Col md={3}>
-									<Form.Control type="text" placeholder="Search Manufacturer" value={searchManufacturer} onChange={(e) => setSearchManufacturer(e.target.value)} />
+									<Form.Control type="text" placeholder="Search Manufacturer" value={searchManufacturer} onChange={(e) => setSearchManufacturer(e.target.value)} className="rounded-md" />
 								</Col>
 								<Col md={2}>
-									<Form.Select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+									<Form.Select value={sortOption} onChange={(e) => setSortOption(e.target.value)} className="rounded-md">
 										<option value="">---Sort---</option>
 										<option value="quantityAsc">Sort by Quantity Ascending</option>
 										<option value="quantityDes">Sort by Quantity Descending</option>
@@ -133,61 +135,65 @@ function VaccineManage() {
 							</Row>
 						</Container>
 
-						<Table striped bordered hover responsive>
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Vaccine Name</th>
-									<th>Image</th>
-									<th>Description</th>
-									<th>Manufacturer</th>
-									<th>Quantity</th>
-									<th>Unit Price ($)</th>
-									<th>Sale Price ($)</th>
-									<th>Status</th>
-									<th colSpan={2}></th>
-								</tr>
-							</thead>
-							<tbody>
-								{/* {vaccines.length > 0 ? (
-									vaccines.map((vaccine) => ( */}
-								{currentVaccines.length > 0 ? ( //Use currentVaccines for pagination
-									currentVaccines.map((vaccine, index) => (
-										<tr key={vaccine.id}>
-											<td>{vaccine.id}</td>
-											<td>{vaccine.name}</td>
-											{/* <td>{vaccine.imagineUrl}</td> */}
-											<td>
-												<Image src={vaccine.imagineUrl} alt={`${vaccine.name} image`} thumbnail />
-											</td>
-											<td>{vaccine.description}</td>
-											<td>{vaccine.manufacturer}</td>
-											<td>{vaccine.quantity}</td>
-											<td>{vaccine.unitPrice}</td>
-											<td>{vaccine.salePrice}</td>
-											<td>{vaccine.status ? vaccine.quantity > 0 ? <Badge bg="success">Available</Badge> : <Badge bg="warning">Unavailable</Badge> : <Badge bg="danger">Disable</Badge>}</td>
-											<td colSpan={2}>
-												<Button variant="info" size="sm" className="mb-2">
-													Update
-												</Button>
-												<Button variant="danger" size="sm" className="mb-2">
-													Delete
-												</Button>
-											</td>
-										</tr>
-									))
-								) : (
-									<>
+						<div className="bg-white shadow-md rounded-lg p-4">
+							<Table responsive className="w-full border border-gray-200 rounded-lg overflow-hidden">
+								<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
+									<tr>
+										<th className="px-4 py-2 text-left">ID</th>
+										<th className="px-4 py-2 text-left">Vaccine Name</th>
+										<th className="px-4 py-2 text-left">Image</th>
+										<th className="px-4 py-2 text-left">Manufacturer</th>
+										<th className="px-4 py-2 text-left">Quantity</th>
+										<th className="px-4 py-2 text-left">Unit Price ($)</th>
+										<th className="px-4 py-2 text-left">Sale Price ($)</th>
+										<th className="px-4 py-2 text-left">Status</th>
+										<th className="px-4 py-2 text-left">Actions</th>
+									</tr>
+								</thead>
+								<tbody className="text-gray-700">
+									{currentVaccines.length > 0 ? (
+										currentVaccines.map((vaccine) => (
+											<tr key={vaccine.id} className="border-b border-gray-200 hover:bg-gray-50">
+												<td className="px-4 py-2">{vaccine.id}</td>
+												<td className="px-4 py-2 whitespace-nowrap overflow-hidden text-ellipsis">{vaccine.name}</td>
+												<td className="px-4 py-2">
+													<Image src={vaccine.imagineUrl} alt={`${vaccine.name} image`} className="h-12 w-12 object-cover rounded-md" />
+												</td>
+												<td className="px-4 py-2">{vaccine.manufacturer}</td>
+												<td className="px-4 py-2">{vaccine.quantity}</td>
+												<td className="px-4 py-2">{vaccine.unitPrice}</td>
+												<td className="px-4 py-2">{vaccine.salePrice}</td>
+												<td className="px-4 py-2">
+													{vaccine.status ? (
+														vaccine.quantity > 0 ? (
+															<span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">Available</span>
+														) : (
+															<span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-xs">Unavailable</span>
+														)
+													) : (
+														<span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">Disabled</span>
+													)}
+												</td>
+												<td></td>
+												{/* <td className="px-4 py-2">
+													<button className="bg-blue-500 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-600">Update</button>
+													<button className="bg-red-500 text-white px-3 py-1 rounded-md text-xs hover:bg-red-600">Delete</button>
+												</td> */}
+											</tr>
+										))
+									) : (
 										<tr>
-											<td colSpan={12} align="center">
-												No Result
+											<td colSpan={9} className="text-center py-4">
+												No Results
 											</td>
 										</tr>
-									</>
-								)}
-							</tbody>
-						</Table>
-						{pagination}
+									)}
+								</tbody>
+							</Table>
+
+							{/* Pagination Centered */}
+							<div className="flex justify-center mt-4">{pagination}</div>
+						</div>
 					</Container>
 				</Col>
 			</Row>

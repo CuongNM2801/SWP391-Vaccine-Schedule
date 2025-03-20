@@ -167,93 +167,6 @@ function BookingPage() {
 		}
 
 		createBooking(values);
-
-		// 	try {
-		// 		// Create booking first
-		// 		const bookingResponse = await fetch(`http://localhost:8080/booking/${values.childId}/create`, {
-		// 			method: "POST",
-		// 			headers: {
-		// 				Authorization: `Bearer ${token}`,
-		// 				"Content-Type": "application/json",
-		// 			},
-		// 			body: JSON.stringify({
-		// 				appointmentDate: values.vaccinationDate,
-		// 				status: true,
-		// 			}),
-		// 		});
-
-		// 		if (!bookingResponse.ok) {
-		// 			throw new Error("Failed to create booking");
-		// 		}
-
-		// 		const bookingData = await bookingResponse.json();
-		// 		const bookingId = bookingData.result.bookingId;
-		// 		console.log(bookingId);
-
-		// 		// Create order
-		// 		const orderResponse = await fetch(`http://localhost:8080/order/${bookingId}/create`, {
-		// 			method: "POST",
-		// 			headers: {
-		// 				Authorization: `Bearer ${token}`,
-		// 				"Content-Type": "application/json",
-		// 			},
-		// 			body: JSON.stringify({
-		// 				orderDate: new Date().toISOString(),
-		// 			}),
-		// 		});
-
-		// 		if (!orderResponse.ok) {
-		// 			throw new Error("Failed to create order");
-		// 		}
-
-		// 		const orderData = await orderResponse.json();
-		// 		const orderId = orderData.result.id;
-
-		// 		// Add vaccine details to order
-		// 		if (type === "single") {
-		// 			for (const v of selectedVaccine) {
-		// 				await fetch(`http://localhost:8080/order/${orderId}/addDetail/${v.vaccine.id}`, {
-		// 					method: "POST",
-		// 					headers: {
-		// 						Authorization: `Bearer ${token}`,
-		// 						"Content-Type": "application/json",
-		// 					},
-		// 					body: JSON.stringify({
-		// 						quantity: v.quantity,
-		// 					}),
-		// 				});
-		// 			}
-		// 		} else if (type === "combo") {
-		// 			// Handle combo vaccines here
-		// 			for (const combo of selectedCombo) {
-		// 				// Add combo vaccines to order
-		// 				// This part needs to be implemented based on your combo structure
-		// 				await fetch(``, {
-		// 					method: "POST",
-		// 					headers: {
-		// 						Authorization: `Bearer ${token}`,
-		// 						"Content-Type": "application/json",
-		// 					},
-		// 					body: JSON.stringify(combo),
-		// 				});
-		// 			}
-		// 		}
-
-		// 		const selectedChild = childs.find((child) => child.id === parseInt(values.childId));
-		// 		navigate("/Transaction", {
-		// 			state: {
-		// 				selectedVaccine: selectedVaccine,
-		// 				selectedCombo: selectedCombo,
-		// 				child: selectedChild,
-		// 				vaccinationDate: values.vaccinationDate,
-		// 				payment: values.payment,
-		// 				type: type,
-		// 				orderId: orderId,
-		// 			},
-		// 		});
-		// 	} catch (error) {
-		// 		setBookingError(error.message);
-		// 	}
 	};
 
 	// // Create booking first
@@ -415,13 +328,18 @@ function BookingPage() {
 	return (
 		<>
 			<Navigation />
-			<Container className="mt-4">
-				{console.log(childs, vaccinesList, comboList)}
-				<h2 className="mb-4 text-center">Vaccination Booking</h2>
+			<Container className="mt-6">
+				<h2 className="text-2xl font-bold text-center text-gray-800">Vaccination Booking</h2>
 				<br />
-				<Form method="POST" onSubmit={formik.handleSubmit}>
-					<InputGroup className="mb-3">
-						<Form.Select aria-label="childId" name="childId" value={formik.values.childId} onChange={formik.handleChange} isInvalid={formik.touched.childId && formik.errors.childId}>
+				<Form method="POST" onSubmit={formik.handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+					<InputGroup className="mb-4 flex items-center gap-4">
+						<Form.Select
+							aria-label="childId"
+							name="childId"
+							value={formik.values.childId}
+							onChange={formik.handleChange}
+							isInvalid={formik.touched.childId && formik.errors.childId}
+							className="p-2 border border-gray-300 rounded-md w-full">
 							{childs.length > 0 ? (
 								<>
 									<option>---Choose child---</option>
@@ -435,21 +353,18 @@ function BookingPage() {
 								<option>No data</option>
 							)}
 						</Form.Select>
-						<Button
-							variant="outline-dark"
-							onClick={() => {
-								setIsOpen(true);
-							}}>
+						<Button variant="dark" className="px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition" onClick={() => setIsOpen(true)}>
 							Add child
 						</Button>
 						<Form.Control.Feedback type="invalid">{formik.errors.childId}</Form.Control.Feedback>
 						{isOpen && <AddChild setIsOpen={setIsOpen} open={isOpen} onAdded={handleChildAdd} />}
 					</InputGroup>
+
 					<Row>
 						<Col md={6}>
-							<b>Choose vaccine type:</b>
-							<ul className="list-unstyled">
-								<li>
+							<b className="text-lg font-semibold">Choose vaccine type:</b>
+							<ul className="list-none mt-2">
+								<li className="mb-2">
 									<Form.Check label="Single" name="vaccineType" type="radio" id="single" checked={type === "single"} onChange={() => handleTypeChange("single")} />
 								</li>
 								<li>
@@ -457,59 +372,59 @@ function BookingPage() {
 								</li>
 							</ul>
 
-							{/* Show vaccine list if chosen single */}
+							{/* Single Vaccine Selection */}
 							{type === "single" && (
-								<div className="mt-3">
-									<b>Choose vaccines:</b>
+								<div className="mt-4">
+									<b className="text-lg font-semibold">Choose vaccines:</b>
 									{vaccinesList.length > 0 ? (
-										<Table>
-											<thead>
+										<Table hover className="border rounded-lg overflow-hidden mt-2">
+											<thead className="bg-gray-200">
 												<tr>
-													<th></th>
-													<th>Vaccine name</th>
-													<th>Price($)</th>
+													<th className="p-2 text-center"></th>
+													<th className="p-2 text-center">Vaccine Name</th>
+													<th className="p-2 text-center">Price ($)</th>
 												</tr>
 											</thead>
 											<tbody>
 												{vaccinesList.map((vaccine) => (
-													<tr key={vaccine.id}>
-														<td>
+													<tr key={vaccine.id} className="hover:bg-gray-100">
+														<td className="text-center">
 															<Form.Check checked={selectedVaccine.some((v) => v.vaccine.id === vaccine.id)} onChange={() => handleVaccineSelection(vaccine)} />
 														</td>
-														<td>{vaccine.name}</td>
-														<td>{vaccine.salePrice}</td>
+														<td className="text-center">{vaccine.name}</td>
+														<td className="text-center">{vaccine.salePrice}</td>
 													</tr>
 												))}
 											</tbody>
 										</Table>
 									) : (
-										<>No vaccine data found. Check your network connection</>
+										<p className="text-red-500 mt-2">No vaccine data found. Check your network connection.</p>
 									)}
 								</div>
 							)}
 
-							{/* Show combo list if chosen combo */}
+							{/* Combo Vaccine Selection */}
 							{type === "combo" && (
-								<div className="mt-3">
-									<b>Choose combo:</b>
+								<div className="mt-4">
+									<b className="text-lg font-semibold">Choose combo:</b>
 									{comboList.length > 0 ? (
-										<Table>
-											<thead>
+										<Table hover className="border rounded-lg overflow-hidden mt-2">
+											<thead className="bg-gray-200">
 												<tr>
-													<th></th>
-													<th>Combo name</th>
-													<th>Included vaccine</th>
-													<th>Price($)</th>
+													<th className="p-2 text-center"></th>
+													<th className="p-2 text-center">Combo Name</th>
+													<th className="p-2 text-center">Included Vaccines</th>
+													<th className="p-2 text-center">Price ($)</th>
 												</tr>
 											</thead>
 											<tbody>
 												{comboList.map((combo) => (
-													<tr key={combo.comboId}>
-														<td>
+													<tr key={combo.comboId} className="hover:bg-gray-100">
+														<td className="text-center">
 															<Form.Check checked={selectedCombo.some((c) => c.comboId === combo.comboId)} onChange={() => handleComboSelection(combo)} />
 														</td>
-														<td>{combo.comboName}</td>
-														<td>
+														<td className="text-center">{combo.comboName}</td>
+														<td className="text-center">
 															{combo.vaccines.map((vaccine, index, array) => (
 																<div key={index}>
 																	{vaccine}
@@ -517,111 +432,66 @@ function BookingPage() {
 																</div>
 															))}
 														</td>
-														<td>{combo.total}</td>
+														<td className="text-center">{combo.total}</td>
 													</tr>
 												))}
 											</tbody>
 										</Table>
 									) : (
-										<>No combo data found. Check your network connection</>
+										<p className="text-red-500 mt-2">No combo data found. Check your network connection.</p>
 									)}
 								</div>
 							)}
 						</Col>
+
 						<Col md={6}>
-							<b>Your order:</b>
-							{/* Show chosen single vaccine if type is single */}
-							{type === "single" && (
-								<>
-									{selectedVaccine.length > 0 ? (
-										<Table borderless>
-											<thead>
-												<tr>
-													<th>Vaccine name</th>
-													<th>Order quantity</th>
-												</tr>
-											</thead>
-											<tbody>
-												{selectedVaccine.map((v) => (
-													<tr key={v.vaccine.id}>
-														<td>{v.vaccine.name}</td>
-														<td>{v.quantity}</td>
-													</tr>
-												))}
-											</tbody>
-										</Table>
-									) : (
-										<>
-											No vaccine chosen
-											<br />
-											{selectedVaccine.length === 0 && bookingError && <p className="text-danger">{bookingError}</p>}
-										</>
-									)}
-								</>
+							<b className="text-lg font-semibold">Your order:</b>
+							{/* Selected Vaccine */}
+							{type === "single" && selectedVaccine.length > 0 && (
+								<Table borderless className="mt-2">
+									<thead className="bg-gray-200">
+										<tr>
+											<th>Vaccine Name</th>
+											<th>Quantity</th>
+										</tr>
+									</thead>
+									<tbody>
+										{selectedVaccine.map((v) => (
+											<tr key={v.vaccine.id}>
+												<td>{v.vaccine.name}</td>
+												<td>{v.quantity}</td>
+											</tr>
+										))}
+									</tbody>
+								</Table>
 							)}
 
-							{/* Show chosen combo vaccine if type is combo */}
-							{type === "combo" && (
-								<>
-									{selectedCombo.length > 0 ? (
-										<Table borderless>
-											<thead>
-												<tr>
-													<th>Combo name</th>
-													<th>Included Vaccine</th>
-												</tr>
-											</thead>
-											<tbody>
-												{selectedCombo.map((c) => (
-													<tr key={c.comboId}>
-														<td>{c.comboName}</td>
-														<td>
-															{c.vaccines.map((v, index) => (
-																<li key={index}>{v}</li>
-															))}
-														</td>
-													</tr>
-												))}
-											</tbody>
-										</Table>
-									) : (
-										// selectedCombo.map((combo) => <li key={combo.id}>{combo.comboName}</li>)
-										<>
-											No combo chosen
-											<br />
-											{selectedCombo.length === 0 && bookingError && <p className="text-danger">{bookingError}</p>}
-										</>
-									)}
-								</>
-							)}
-
-							<Form.Group className="mb-3" controlId="vaccinationDate">
-								<Form.Label>
-									<b>Choose vaccination date:</b>
-								</Form.Label>
+							{/* Vaccination Date */}
+							<Form.Group className="mb-4 mt-4">
+								<Form.Label className="font-semibold">Choose vaccination date:</Form.Label>
 								<Form.Control
 									type="date"
-									placeholder="Choose Date"
 									name="vaccinationDate"
 									value={formik.values.vaccinationDate}
 									onChange={formik.handleChange}
+									className="p-2 border border-gray-300 rounded-md w-full"
 									isInvalid={formik.touched.vaccinationDate && formik.errors.vaccinationDate}
 								/>
 								<Form.Control.Feedback type="invalid">{formik.errors.vaccinationDate}</Form.Control.Feedback>
 							</Form.Group>
 
-							<Form.Group className="mb-3" controlId="paymentMethod">
-								<Form.Label>
-									<b>Choose payment method: </b>
-								</Form.Label>
+							{/* Payment Method */}
+							<Form.Group className="mb-4">
+								<Form.Label className="font-semibold">Choose payment method:</Form.Label>
 								<br />
-								<Form.Check defaultChecked label="Payment by credit card." name="payment" type="radio" id="credit" value="credit" />
-								<Form.Check label="Cash payment at the cashier." name="payment" type="radio" id="cash" value="cash" disabled />
-								<Form.Check label="Payment via e-commerce applications, mobile payment services, VNPAY-QR e-wallets, Momo,..." name="payment" type="radio" id="app" value="app" disabled />
-								<Form.Control.Feedback type="invalid">{formik.errors.payment}</Form.Control.Feedback>
+								<Form.Check defaultChecked label="Payment by credit card" name="payment" type="radio" id="credit" value="credit" />
+								<Form.Check label="Cash payment at the cashier" name="payment" type="radio" id="cash" value="cash" disabled />
+								<Form.Check label="Payment via e-wallets (VNPAY, Momo, etc.)" name="payment" type="radio" id="app" value="app" disabled />
 							</Form.Group>
-							{bookingError && <p className="text-danger">{bookingError}</p>}
-							<Button type="submit">Proceed</Button>
+
+							<Button type="submit" className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
+								Proceed
+							</Button>
 						</Col>
 					</Row>
 				</Form>
