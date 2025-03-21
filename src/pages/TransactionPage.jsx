@@ -144,8 +144,7 @@ function TransactionPage() {
 			if (paymentIntent.status === "succeeded") {
 				// Payment successful, update order status
 				try {
-					// console.log("Confirming payment with backend for order:", orderId);
-					// console.log("Payment amount: ", orderTotal);
+					console.log("Confirming payment with backend for order:", orderId);
 					const response = await fetch(`${paymentAPI}/${orderId}/confirm`, {
 						method: "POST",
 						headers: {
@@ -158,9 +157,8 @@ function TransactionPage() {
 						}),
 					});
 
-					const responseData = await response.json();
-					// console.log("Backend confirmation response:", response.status);
-					// console.log(responseData);
+					const responseData = await response.text();
+					console.log("Backend confirmation response:", response.status, responseData);
 
 					if (!response.ok) {
 						throw new Error(`Failed to confirm payment with backend: ${response.status} ${responseData}`);
@@ -169,7 +167,7 @@ function TransactionPage() {
 					setSuccess("Payment successful!");
 					setTimeout(() => {
 						navigate("/");
-					}, 10000);
+					}, 2000);
 				} catch (backendError) {
 					console.error("Backend confirmation error:", backendError);
 					setError(`Payment was processed but failed to update order. Please contact support with this reference: ${paymentIntent.id}`);
@@ -292,8 +290,8 @@ function TransactionPage() {
 												<th>#</th>
 												<th>Combo name</th>
 												<th>Included Vaccines</th>
-												<th>Sale off</th>
-												<th>Price($)</th>
+												<th>Quantity</th>
+												<th>Price</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -328,8 +326,63 @@ function TransactionPage() {
 								)}
 							</Card.Body>
 						</Card>
+
+						{/* <strong>Your combos order:</strong>
+						<Table bordered>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Combo name</th>
+									<th>Included Vaccines</th>
+									<th>Quantity</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>Combo 5 in 1</td>
+									<td>
+										{"Hepatitus A, Hepatitus B, Diarhea, Headache, Stomachache"
+											.split(", ") // Split the string into an array
+											.map((vaccine, index, array) => (
+												<React.Fragment key={index}>
+													{vaccine}
+													{index < array.length - 1 && <br />}
+												</React.Fragment>
+											))}
+									</td>
+									<td>
+										{"1, 1, 1, 1, 2"
+											.split(", ") // Split the string into an array
+											.map((dose, index, array) => (
+												<React.Fragment key={index}>
+													{dose}
+													{index < array.length - 1 && <br />} 
+												</React.Fragment>
+											))}
+									</td>
+									<td>1800</td>
+								</tr>
+							</tbody>
+						</Table> */}
 					</Col>
 					<Col lg={6}>
+						{/* <Card>
+							<Card.Header>
+								<b>Booking detail</b>
+							</Card.Header>
+							<Card.Body>
+								<Card.Text>
+									<b>Child name: </b>
+									{child.name}
+								</Card.Text>
+								<Card.Text>
+									<b>Price for vaccine combos: </b>------------- 1000
+								</Card.Text>
+							</Card.Body>
+							<Card.Footer>2000$</Card.Footer>
+						</Card> */}
 						<Card>
 							<Card.Header>
 								<Card.Title>Your transaction detail</Card.Title>

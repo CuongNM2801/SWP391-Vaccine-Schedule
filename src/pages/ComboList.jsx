@@ -9,14 +9,6 @@ function ComboList() {
 
 	useEffect(() => {
 		getCombo();
-		// fetch(comboAPI)
-		// 	.then((response) => response.json())
-		// 	.then((data) => {
-		// 		const groupedCombos = groupCombos(data.result);
-		// 		setComboList(groupedCombos);
-		// 		// setComboList(data.result);
-		// 	})
-		// 	.catch((error) => console.error("Error fetching combos:", error));
 	}, []);
 
 	const getCombo = async () => {
@@ -62,14 +54,32 @@ function ComboList() {
 			<Container>
 				{/* {console.log(comboList)} */}
 				<h2>Vaccine combo list:</h2>
-				<Form>
-					<InputGroup className="mb-3">
-						<Form.Control placeholder="Vaccine combo name..." aria-label="Combo name" aria-describedby="basic-addon2" />
-						<Button variant="outline-secondary" id="button-addon2">
-							Search
-						</Button>
-					</InputGroup>
-				</Form>
+				<div>
+					<Form>
+						<InputGroup className="mb-3">
+							<Form.Control placeholder="Vaccine combo name..." aria-label="Combo name" aria-describedby="basic-addon2" />
+							<Button variant="outline-secondary" id="button-addon2">
+								Search
+							</Button>
+						</InputGroup>
+						<Row>
+							<Col md={3}>
+								<Form.Select className="rounded-md">
+									<option value="">---Category---</option>
+									<option value="kids">Combo for kids</option>
+									<option value="preschool">Combo for preschool children</option>
+								</Form.Select>
+							</Col>
+							<Col md={2}>
+								<Form.Select className="rounded-md">
+									<option value="">---Sort---</option>
+									<option value="priceAsc">Price Ascending</option>
+									<option value="priceDes">Price Descending</option>
+								</Form.Select>
+							</Col>
+						</Row>
+					</Form>
+				</div>
 
 				<Row xs={1} md={2} lg={4} className="g-4">
 					{comboList.map((combo) => (
@@ -96,6 +106,8 @@ function ComboList() {
 						comboList.map((combo) => {
 							<div key={combo.comboId}>
 								<h5>{combo.comboName}</h5>
+								<b>{combo.comboCategory}</b>
+								<p>{combo.description}</p>
 							</div>;
 						})
 					) : (

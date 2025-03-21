@@ -7,7 +7,8 @@ function Dashboard() {
 	const api = "http://localhost:8080";
 	const token = localStorage.getItem("token");
 	const [accountError, setAccountError] = useState("");
-	const [accountList, setAccountList] = useState([]);
+	const [userList, setUserList] = useState([]);
+	const [staffList, setStaffList] = useState([]);
 	const [vaccineError, setVaccineError] = useState("");
 	const [vaccineList, setVaccineList] = useState([]);
 	const [comboError, setComboError] = useState("");
@@ -32,7 +33,10 @@ function Dashboard() {
 				throw new Error("Failed to get accounts");
 			}
 			const data = await response.json();
-			setAccountList(data.result);
+			const users = data.result.filter((account) => account.roleName === "USER");
+			const staffs = data.result.filter((account) => account.roleName === "STAFF");
+			setUserList(users);
+			setStaffList(staffs);
 		} catch (err) {
 			setAccountError(err.message);
 		}
@@ -52,6 +56,7 @@ function Dashboard() {
 			}
 			const data = await response.json();
 			setVaccineList(data.result);
+			getRandomVaccines(data.result);
 		} catch (err) {
 			setVaccineError(err.message);
 		}
@@ -97,9 +102,30 @@ function Dashboard() {
 		return Object.values(grouped);
 	};
 
+	const getRandomUsers = (users, count) => {
+		const shuffled = users.sort(() => 0.5 - Math.random());
+		return shuffled.slice(0, count);
+	};
+	const getRandomStaffs = (staffs, count) => {
+		const shuffled = staffs.sort(() => 0.5 - Math.random());
+		return shuffled.slice(0, count);
+	};
+	const getRandomVaccines = (vaccines, count) => {
+		const shuffled = vaccines.sort(() => 0.5 - Math.random());
+		return shuffled.slice(0, count);
+	};
+	const getRandomCombos = (combos, count) => {
+		const shuffled = combos.sort(() => 0.5 - Math.random());
+		return shuffled.slice(0, count);
+	};
+	const randomUser = getRandomUsers(userList, 4);
+	const randomStaff = getRandomStaffs(staffList, 4);
+	const randomVaccine = getRandomVaccines(vaccineList, 3);
+	const randomCombo = getRandomCombos(comboList, 3);
+
 	return (
 		<div className="bg-gray-100 min-h-screen">
-			{console.log(accountList, vaccineList, comboList)}
+			{/* {console.log(accountList, vaccineList, comboList)} */}
 			<Row>
 				<Sidebar />
 				<Col>
@@ -107,10 +133,11 @@ function Dashboard() {
 						<h1 className="mb-4 text-primary">Dashboard</h1>
 						<hr className="mb-4" />
 
+						{/* Statistic cards */}
 						<Row className="mb-4">
 							{[
-								{ title: "Total Accounts", value: 1200, color: "bg-blue-200" },
-								{ title: "Total Vaccines", value: 35, color: "bg-green-200" },
+								{ title: "Total Accounts", value: userList.length + staffList.length + 1, color: "bg-blue-200" },
+								{ title: "Total Vaccines", value: vaccineList.length, color: "bg-green-200" },
 								{ title: "Total Bookings", value: 520, color: "bg-yellow-200" },
 								{ title: "Total Sales ($)", value: "$50,000", color: "bg-red-200" },
 							].map((stat, index) => (
@@ -130,25 +157,37 @@ function Dashboard() {
 							<Col md={6}>
 								<Card className="shadow-md p-3">
 									<div className="flex justify-between items-center mb-3">
-										<h5 className="text-lg font-bold">Account Table</h5>
+										<h5 className="text-lg font-bold">Registered Account</h5>
 										<Link to="/Admin/ManageAccount" className="text-blue-600 hover:underline">
 											Manage Accounts
 										</Link>
 									</div>
-									<Table striped bordered hover>
-										<thead>
+									<Table hover className="w-full border border-gray-200 rounded-lg overflow-hidden">
+										<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
 											<tr>
-												<th>UserID</th>
-												<th>Full Name</th>
-												<th>Username</th>
+												<th className="px-2 py-2 text-left">#</th>
+												<th className="px-2 py-2 text-left">Fullname</th>
+												<th className="px-2 py-2 text-left">Username</th>
+												<th className="px-2 py-2 text-left">Email</th>
 											</tr>
 										</thead>
-										<tbody>
-											<tr>
-												<td>1</td>
-												<td>John Doe</td>
-												<td>johndoe</td>
-											</tr>
+										<tbody className="text-gray-700">
+											{userList.length > 0 ? (
+												randomUser.map((user, index) => (
+													<tr key={user.accountId}>
+														<td className="px-2 py-2 text-left">{index + 1}</td>
+														<td className="px-2 py-2 text-left">{`${user.firstName} ${user.lastName}`}</td>
+														<td className="px-2 py-2 text-left">{user.username}</td>
+														<td className="px-2 py-2 text-left">{user.email}</td>
+													</tr>
+												))
+											) : (
+												<tr>
+													<td colSpan={4}>
+														<p className="text-red-500 text-center">{accountError}</p>
+													</td>
+												</tr>
+											)}
 										</tbody>
 									</Table>
 								</Card>
@@ -161,53 +200,91 @@ function Dashboard() {
 											Scheduling
 										</Link>
 									</div>
-									<Table striped bordered hover>
-										<thead>
+									<Table hover className="w-full border border-gray-200 rounded-lg overflow-hidden">
+										<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
 											<tr>
-												<th>UserID</th>
-												<th>Full Name</th>
-												<th>Username</th>
+												<th className="px-2 py-2 text-left">ID</th>
+												<th className="px-2 py-2 text-left">Fullname</th>
+												<th className="px-2 py-2 text-left">Email</th>
 											</tr>
 										</thead>
-										<tbody>
-											<tr>
-												<td>101</td>
-												<td>Jane Smith</td>
-												<td>janesmith</td>
-											</tr>
+										<tbody className="text-gray-700">
+											{staffList.length > 0 ? (
+												randomStaff.map((user, index) => (
+													<tr key={user.accountId}>
+														<td className="px-2 py-2 text-left">{user.accountId}</td>
+														<td className="px-2 py-2 text-left">{`${user.firstName} ${user.lastName}`}</td>
+														<td className="px-2 py-2 text-left">{user.email}</td>
+													</tr>
+												))
+											) : (
+												<tr>
+													<td colSpan={4}>
+														<p className="text-red-500 text-center">No data</p>
+													</td>
+												</tr>
+											)}
 										</tbody>
 									</Table>
+									{accountError && <p className="text-red-500 text-center">{accountError}</p>}
 								</Card>
 							</Col>
 						</Row>
 
 						{/* Vaccine Table */}
-						<Card className="shadow-md p-3 mb-4">
-							<div className="flex justify-between items-center mb-3">
-								<h5 className="text-lg font-bold">Vaccine Table</h5>
-								<Link to="/Admin/ManageVaccine" className="text-blue-600 hover:underline">
-									Manage Vaccines
-								</Link>
-							</div>
-							<Table striped bordered hover>
-								<thead>
-									<tr>
-										<th>Vaccine ID</th>
-										<th>Name</th>
-										<th>Type</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>V001</td>
-										<td>COVID-19 Vaccine</td>
-										<td>mRNA</td>
-									</tr>
-								</tbody>
-							</Table>
-						</Card>
+						<Row>
+							<Col md={9}>
+								<Card className="shadow-md p-3 mb-4">
+									<div className="flex justify-between items-center mb-3">
+										<h5 className="text-lg font-bold">Vaccine Inventory</h5>
+										<Link to="/Admin/ManageVaccine" className="text-blue-600 hover:underline">
+											Manage Vaccines
+										</Link>
+									</div>
+									<Table hover className="w-full border border-gray-200 rounded-lg overflow-hidden">
+										<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
+											<tr>
+												<th className="px-4 py-2 text-left">ID</th>
+												<th className="px-4 py-2 text-left">Vaccine Name</th>
+												<th className="px-4 py-2 text-left">Quantity</th>
+												<th className="px-4 py-2 text-left">Unit Price ($)</th>
+												<th className="px-4 py-2 text-left">Sale Price ($)</th>
+											</tr>
+										</thead>
+										<tbody className="text-gray-700">
+											{vaccineList.length > 0 ? (
+												randomVaccine.map((vaccine) => (
+													<tr key={vaccine.id}>
+														<td className="px-4 py-2 text-left">{vaccine.id}</td>
+														<td className="px-4 py-2 text-left">{vaccine.name}</td>
+														<td className="px-4 py-2 text-left">{vaccine.quantity}</td>
+														<td className="px-4 py-2 text-left">{vaccine.unitPrice}</td>
+														<td className="px-4 py-2 text-left">{vaccine.salePrice}</td>
+													</tr>
+												))
+											) : (
+												<tr>
+													<td colSpan={5}>
+														<p className="text-red-500 text-center">{vaccineError}</p>
+													</td>
+												</tr>
+											)}
+										</tbody>
+									</Table>
+								</Card>
+							</Col>
+							<Col md={3}>
+								<Card className="shadow-md p-3 mb-4 items-center">
+									<div className="flex justify-between items-center mb-3">
+										<h5 className="text-lg font-bold">Top Vaccine</h5>
+									</div>
+									<p className="text-red-500">No data</p>
+								</Card>
+							</Col>
+						</Row>
 
 						{/* Combo Table */}
+						{/* {console.log(randomCombo)} */}
 						<Card className="shadow-md p-3">
 							<div className="flex justify-between items-center mb-3">
 								<h5 className="text-lg font-bold">Combo Table</h5>
@@ -215,20 +292,41 @@ function Dashboard() {
 									Manage Combos
 								</Link>
 							</div>
-							<Table striped bordered hover>
-								<thead>
+							<Table hover className="w-full border border-gray-200 rounded-lg overflow-hidden">
+								<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
 									<tr>
-										<th>Combo ID</th>
-										<th>Name</th>
-										<th>Description</th>
+										<th className="px-4 py-2 text-left">ID</th>
+										<th className="px-4 py-2 text-left">Combo Name</th>
+										<th className="px-4 py-2 text-left">Included Vaccine</th>
+										<th className="px-4 py-2 text-left">Sale Off</th>
+										<th className="px-4 py-2 text-left">Price</th>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>C001</td>
-										<td>Child Vaccine Package</td>
-										<td>Includes 5 essential vaccines</td>
-									</tr>
+								<tbody className="text-gray-700">
+									{comboList.length > 0 ? (
+										randomCombo.map((combo) => (
+											<tr key={combo.comboId}>
+												<td className="px-4 py-2 text-left">{combo.comboId}</td>
+												<td className="px-4 py-2 text-left">{combo.comboName}</td>
+												<td className="px-4 py-2 text-left">
+													{combo.vaccines.map((vaccine) => (
+														<>
+															{vaccine.name}
+															<br />
+														</>
+													))}
+												</td>
+												<td className="px-4 py-2 text-left">{`${combo.saleOff}%`}</td>
+												<td className="px-4 py-2 text-left">{`${combo.total}$`}</td>
+											</tr>
+										))
+									) : (
+										<tr>
+											<td colSpan={5}>
+												<p className="text-red-500 text-center">{comboError}</p>
+											</td>
+										</tr>
+									)}
 								</tbody>
 							</Table>
 						</Card>

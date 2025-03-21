@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
 	const navigate = useNavigate();
-	// const accountAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/account";
 	const accountAPI = "http://localhost:8080/auth/login";
 
 	const formik = useFormik({
@@ -41,43 +40,50 @@ function LoginPage() {
 	};
 
 	return (
-		<Container>
-			<Link to={"/"}>Home</Link>
-			<h1>Login</h1>
-			<Row>
-				<Col>
-					<Form method="POST" onSubmit={formik.handleSubmit}>
-						<Row className="mb-3">
-							<Form.Group as={Col} controlId="txtUsername">
-								<Form.Label>Username</Form.Label>
-								<Form.Control type="text" placeholder="Enter username" name="username" value={formik.values.username} onChange={formik.handleChange} />
-							</Form.Group>
+		<Container className="min-h-screen flex items-center justify-center">
+			<div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+				<Link to="/" className="text-blue-500 hover:underline">
+					Home
+				</Link>
+				<h1 className="text-2xl font-bold text-center mb-4">Login</h1>
 
-							<Form.Group as={Col} controlId="txtPassword">
-								<Form.Label>Password</Form.Label>
-								<Form.Control type="password" placeholder="Password" name="password" value={formik.values.password} onChange={formik.handleChange} />
-							</Form.Group>
-						</Row>
-						<Button variant="primary" type="submit">
-							Submit
-						</Button>
-					</Form>
-				</Col>
-				<Col className="d-flex flex-column align-items-center">
-					<div className="d-flex align-items-center my-3">
-						<hr className="flex-grow-1" style={{ borderTop: "1px solid #ccc" }} />
-						<span className="mx-2">OR</span>
-						<hr className="flex-grow-1" style={{ borderTop: "1px solid #ccc" }} />
-					</div>
+				<Form method="POST" onSubmit={formik.handleSubmit}>
+					<Form.Group controlId="txtUsername" className="mb-4">
+						<Form.Label className="font-medium">Username</Form.Label>
+						<Form.Control type="text" placeholder="Enter username" name="username" value={formik.values.username} onChange={formik.handleChange} className="border border-gray-300 rounded-md p-2 w-full" />
+					</Form.Group>
 
-					<p>Continue with Google</p>
-					<Button>Google</Button>
-				</Col>
-			</Row>
+					<Form.Group controlId="txtPassword" className="mb-4">
+						<Form.Label className="font-medium">Password</Form.Label>
+						<Form.Control type="password" placeholder="Password" name="password" value={formik.values.password} onChange={formik.handleChange} className="border border-gray-300 rounded-md p-2 w-full" />
+					</Form.Group>
 
-			<p>
-				New to our website? <Link to={"/Register"}>Register</Link> now.
-			</p>
+					<Button variant="primary" type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition">
+						Submit
+					</Button>
+				</Form>
+
+				<div className="flex items-center my-4">
+					<hr className="flex-grow border-gray-300" />
+					<span className="mx-2 text-gray-500">OR</span>
+					<hr className="flex-grow border-gray-300" />
+				</div>
+
+				<div className="text-center">
+					<p className="text-gray-600">Continue with Google</p>
+					<Button disabled className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md transition">
+						Google
+					</Button>
+				</div>
+
+				<p className="mt-4 text-center text-gray-700">
+					New to our website?{" "}
+					<Link to="/Register" className="text-blue-500 hover:underline">
+						Register
+					</Link>{" "}
+					now.
+				</p>
+			</div>
 		</Container>
 	);
 }

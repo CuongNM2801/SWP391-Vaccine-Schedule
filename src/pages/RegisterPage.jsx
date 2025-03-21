@@ -6,7 +6,6 @@ import * as Yup from "yup";
 
 function RegisterPage() {
 	const navigate = useNavigate();
-	// const accountAPI = "https://66fe49e22b9aac9c997b30ef.mockapi.io/account";
 	const accountAPI = "http://localhost:8080/users/register";
 
 	const validation = Yup.object().shape({
@@ -80,116 +79,95 @@ function RegisterPage() {
 	};
 
 	return (
-		<Container>
-			<Link to={"/"}>Home</Link>
-			<h1>Register</h1>
-			<Form method="POST" onSubmit={formik.handleSubmit}>
-				<Row className="mb-3">
-					<Form.Group as={Col} controlId="txtFirstname">
-						<Form.Label>First Name</Form.Label>
-						<Form.Control
-							type="text"
-							placeholder="Enter first name"
-							name="firstName"
-							value={formik.values.firstName}
-							onChange={formik.handleChange}
-							isInvalid={formik.touched.firstName && formik.errors.firstName}
-						/>
-						<Form.Control.Feedback type="invalid">{formik.errors.firstName}</Form.Control.Feedback>
+		<Container className="min-h-screen flex items-center justify-center">
+			<div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+				<Link to="/" className="text-blue-500 hover:underline">
+					Home
+				</Link>
+				<h1 className="text-2xl font-bold text-center mb-4">Register</h1>
+
+				<Form method="POST" onSubmit={formik.handleSubmit}>
+					<Row className="mb-3">
+						<Col>
+							<Form.Group controlId="txtFirstname">
+								<Form.Label>First Name</Form.Label>
+								<Form.Control type="text" placeholder="Enter first name" {...formik.getFieldProps("firstName")} isInvalid={formik.touched.firstName && formik.errors.firstName} />
+								<Form.Control.Feedback type="invalid">{formik.errors.firstName}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+
+						<Col>
+							<Form.Group controlId="txtLastname">
+								<Form.Label>Last Name</Form.Label>
+								<Form.Control type="text" placeholder="Enter last name" {...formik.getFieldProps("lastName")} isInvalid={formik.touched.lastName && formik.errors.lastName} />
+								<Form.Control.Feedback type="invalid">{formik.errors.lastName}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+					</Row>
+
+					<Form.Group className="mb-3">
+						<Form.Label>Gender</Form.Label>
+						<div className="flex gap-4">
+							<Form.Check inline defaultChecked label="Male" name="gender" type="radio" id="Male" value="MALE" onChange={formik.handleChange} />
+							<Form.Check inline label="Female" name="gender" type="radio" id="Female" value="FEMALE" onChange={formik.handleChange} />
+						</div>
 					</Form.Group>
 
-					<Form.Group as={Col} controlId="txtLastname">
-						<Form.Label>Last name</Form.Label>
-						<Form.Control
-							type="text"
-							placeholder="Enter last name"
-							name="lastName"
-							value={formik.values.lastName}
-							onChange={formik.handleChange}
-							isInvalid={formik.touched.lastName && formik.errors.lastName}
-						/>
-						<Form.Control.Feedback type="invalid">{formik.errors.lastName}</Form.Control.Feedback>
-					</Form.Group>
-				</Row>
-
-				<Form.Group className="mb-3">
-					<Form.Check inline defaultChecked label="Male" name="gender" type="radio" id="Male" value="MALE" onChange={formik.handleChange} />
-					<Form.Check inline label="Female" name="gender" type="radio" id="Female" value="FEMALE" onChange={formik.handleChange} />
-				</Form.Group>
-
-				<Form.Group className="mb-3" controlId="txtUsername">
-					<Form.Label>Username</Form.Label>
-					<Form.Control
-						type="text"
-						placeholder="Enter username"
-						name="username"
-						value={formik.values.username}
-						onChange={formik.handleChange}
-						isInvalid={formik.touched.username && formik.errors.username}
-					/>
-					<Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
-				</Form.Group>
-
-				<Form.Group className="mb-3" controlId="txtPassword">
-					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" placeholder="Password" name="password" value={formik.values.password} onChange={formik.handleChange} isInvalid={formik.touched.password && formik.errors.password} />
-					<Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
-				</Form.Group>
-
-				<Form.Group className="mb-3" controlId="txtConfirm">
-					<Form.Label>Confirm password</Form.Label>
-					<Form.Control
-						type="password"
-						placeholder="Confirm password"
-						name="confirmPassword"
-						value={formik.values.confirmPassword}
-						onChange={formik.handleChange}
-						isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
-					/>
-					<Form.Control.Feedback type="invalid">{formik.errors.confirmPassword}</Form.Control.Feedback>
-				</Form.Group>
-
-				<Row className="mb-3">
-					<Form.Group as={Col} controlId="txtEmail">
-						<Form.Label>Email</Form.Label>
-						<Form.Control type="email" placeholder="Enter email" name="email" value={formik.values.email} onChange={formik.handleChange} isInvalid={formik.touched.email && formik.errors.email} />
-						<Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
+					<Form.Group className="mb-3" controlId="txtUsername">
+						<Form.Label>Username</Form.Label>
+						<Form.Control type="text" placeholder="Enter username" {...formik.getFieldProps("username")} isInvalid={formik.touched.username && formik.errors.username} />
+						<Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
 					</Form.Group>
 
-					<Form.Group as={Col} controlId="txtPhone">
-						<Form.Label>Phone number</Form.Label>
-						<Form.Control
-							type="tel"
-							placeholder="Enter phone number"
-							name="phoneNumber"
-							value={formik.values.phoneNumber}
-							onChange={formik.handleChange}
-							isInvalid={formik.touched.phoneNumber && formik.errors.phoneNumber}
-						/>
-						<Form.Control.Feedback type="invalid">{formik.errors.phoneNumber}</Form.Control.Feedback>
+					<Form.Group className="mb-3" controlId="txtPassword">
+						<Form.Label>Password</Form.Label>
+						<Form.Control type="password" placeholder="Password" {...formik.getFieldProps("password")} isInvalid={formik.touched.password && formik.errors.password} />
+						<Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
 					</Form.Group>
 
-					<Form.Group as={Col} controlId="txtAddress">
+					<Form.Group className="mb-3" controlId="txtConfirm">
+						<Form.Label>Confirm Password</Form.Label>
+						<Form.Control type="password" placeholder="Confirm password" {...formik.getFieldProps("confirmPassword")} isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword} />
+						<Form.Control.Feedback type="invalid">{formik.errors.confirmPassword}</Form.Control.Feedback>
+					</Form.Group>
+
+					<Row className="mb-3">
+						<Col>
+							<Form.Group controlId="txtEmail">
+								<Form.Label>Email</Form.Label>
+								<Form.Control type="email" placeholder="Enter email" {...formik.getFieldProps("email")} isInvalid={formik.touched.email && formik.errors.email} />
+								<Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+
+						<Col>
+							<Form.Group controlId="txtPhone">
+								<Form.Label>Phone Number</Form.Label>
+								<Form.Control type="tel" placeholder="Enter phone number" {...formik.getFieldProps("phoneNumber")} isInvalid={formik.touched.phoneNumber && formik.errors.phoneNumber} />
+								<Form.Control.Feedback type="invalid">{formik.errors.phoneNumber}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+					</Row>
+
+					<Form.Group className="mb-3" controlId="txtAddress">
 						<Form.Label>Address</Form.Label>
-						<Form.Control type="text" placeholder="Enter address" name="address" value={formik.values.address} onChange={formik.handleChange} isInvalid={formik.touched.address && formik.errors.address} />
+						<Form.Control type="text" placeholder="Enter address" {...formik.getFieldProps("address")} isInvalid={formik.touched.address && formik.errors.address} />
 						<Form.Control.Feedback type="invalid">{formik.errors.address}</Form.Control.Feedback>
 					</Form.Group>
-				</Row>
 
-				{/* 
-				<Form.Group controlId="image" className="mb-3">
-					<Form.Label>Image</Form.Label>
-					<Form.Control type="file" onChange={handleFileChange} aria-label="Vaccine Image" isInvalid={formik.touched.urlImage && formik.errors.urlImage} />
-					<Form.Control.Feedback type="invalid">{formik.errors.urlImage}</Form.Control.Feedback>
-				</Form.Group> */}
+					<Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-all">
+						Register
+					</Button>
+				</Form>
 
-				<Button variant="primary" type="submit">
-					Submit
-				</Button>
-			</Form>
-			<p>
-				Already have an account? <Link to={"/Login"}>Login</Link> now.
-			</p>
+				<p className="mt-4 text-center">
+					Already have an account?{" "}
+					<Link to="/Login" className="text-blue-500 hover:underline">
+						Login
+					</Link>{" "}
+					now.
+				</p>
+			</div>
 		</Container>
 	);
 }

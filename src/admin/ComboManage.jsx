@@ -94,14 +94,6 @@ function ComboManage() {
 		</Pagination>
 	);
 
-	const highlightComboRows = (comboId) => {
-		document.querySelectorAll(`[data-combo-id="${comboId}"]`).forEach((row) => row.classList.add("bg-blue-200"));
-	};
-
-	const removeHighlight = (comboId) => {
-		document.querySelectorAll(`[data-combo-id="${comboId}"]`).forEach((row) => row.classList.remove("bg-blue-200"));
-	};
-
 	return (
 		<div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
 			<Row>
@@ -149,68 +141,66 @@ function ComboManage() {
 
 						{/* Table Section */}
 						{/* Fuck this part */}
-						<div className="bg-white shadow-md rounded-lg p-4">
-							<Table className="w-full border border-gray-200 rounded-lg overflow-hidden">
-								<thead className="bg-gray-100 text-gray-600 text-sm uppercase">
-									<tr>
-										<th className="px-4 py-2 text-left">Id</th>
-										<th className="px-4 py-2 text-left">Combo Name</th>
-										{/* <th className="px-4 py-2 text-left">Combo Category</th> */}
-										{/* <th className="px-4 py-2 text-left">Description</th> */}
-										<th className="px-4 py-2 text-left">Included Vaccine</th>
-										<th className="px-4 py-2 text-left">Vaccine Manufacturer</th>
-										<th className="px-4 py-2 text-left">Vaccine Dose</th>
-										<th className="px-4 py-2 text-left">Sale Off</th>
-										<th className="px-4 py-2 text-left">Total Price</th>
-										<th className="px-4 py-2 text-left">Actions</th>
+						<div className="overflow-x-auto">
+							<table className="w-full border border-gray-400 rounded-lg shadow-md">
+								<thead className="rounded-t-lg">
+									<tr className="bg-pink-300 text-gray-700">
+										<th className="px-4 py-2 border">Id</th>
+										<th className="px-4 py-2 border">Combo Name</th>
+										<th className="px-4 py-2 border">Included Vaccine</th>
+										<th className="px-4 py-2 border">Vaccine Manufacturer</th>
+										<th className="px-4 py-2 border">Vaccine Dose</th>
+										<th className="px-4 py-2 border">Sale Off</th>
+										<th className="px-4 py-2 border">Total Price</th>
+										<th className="px-4 py-2 border">Actions</th>
 									</tr>
 								</thead>
-								<tbody>
-									{currentCombos.length > 0 ? (
-										currentCombos.flatMap((combo) =>
-											combo.vaccines.map((vaccine, index) => (
-												<tr
-													key={`${combo.comboId}-${index}`}
-													data-combo-id={combo.comboId} // Assign comboId for grouping
-													className="border-b border-gray-200 hover:bg-blue-100 transition-colors"
-													onMouseEnter={() => highlightComboRows(combo.comboId)}
-													onMouseLeave={() => removeHighlight(combo.comboId)}>
+
+								{currentCombos.length > 0 ? (
+									currentCombos.map((combo, comboIndex) => (
+										<tbody key={combo.comboId} className={`group border border-gray-800 transition-all duration-200 hover:border-pink-500 hover:border-4 ${comboIndex % 2 === 0 ? "bg-pink-100" : "bg-white"}`}>
+											{combo.vaccines.map((vaccine, index) => (
+												<tr key={`${combo.comboId}-${index}`} className="group-hover:bg-pink-200 transition-all">
 													{index === 0 && (
 														<>
-															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center">
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center border font-semibold">
 																{combo.comboId}
 															</td>
-															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center">
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 font-bold text-gray-700 border">
 																{combo.comboName}
 															</td>
 														</>
 													)}
-													<td className="truncate">{vaccine.name}</td>
-													<td className="truncate">{vaccine.manufacturer}</td>
-													<td className="truncate">{vaccine.dose}</td>
+													<td className="px-4 py-2 border">{vaccine.name}</td>
+													<td className="px-4 py-2 border">{vaccine.manufacturer}</td>
+													<td className="px-4 py-2 border">{vaccine.dose}</td>
 													{index === 0 && (
 														<>
-															<td rowSpan={combo.vaccines.length} className="px-4 py-2">
-																{combo.saleOff}
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center text-green-600 font-semibold border">
+																{combo.saleOff}%
 															</td>
-															<td rowSpan={combo.vaccines.length} className="px-4 py-2">
-																{parseFloat(combo.total).toFixed(2)}
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center font-bold border">
+																${parseFloat(combo.total).toFixed(2)}
 															</td>
-															<td rowSpan={combo.vaccines.length} className="px-4 py-2"></td>
+															<td rowSpan={combo.vaccines.length} className="px-4 py-2 text-center border">
+																<button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-700">Edit</button>
+															</td>
 														</>
 													)}
 												</tr>
-											))
-										)
-									) : (
+											))}
+										</tbody>
+									))
+								) : (
+									<tbody>
 										<tr>
-											<td colSpan={9} align="center">
+											<td colSpan={8} className="px-4 py-2 text-center border bg-gray-100">
 												No Result
 											</td>
 										</tr>
-									)}
-								</tbody>
-							</Table>
+									</tbody>
+								)}
+							</table>
 
 							{/* Pagination Centered */}
 							<div className="text-center mt-3">{pagination}</div>
